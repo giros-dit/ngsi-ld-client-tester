@@ -37,7 +37,7 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
     ```
 5. Move to [`/sensor-tester`](sensor-tester/) folder:
     ```bash
-    cd sensor-tester
+    $ cd sensor-tester
     ```
 6. Enable virtual environment for your specific Python release:
     ```bash
