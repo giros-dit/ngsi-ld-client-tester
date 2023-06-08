@@ -51,10 +51,10 @@ ngsi_ld.set_default_header(
 api_instance = ngsi_ld_client.ContextInformationConsumptionApi(ngsi_ld)
 
 try:
-    # Entity creation 
+    # Entity query
     api_response = api_instance.retrieve_entity(entity_id='urn:ngsi-ld:iot:Sensor:1')
     #logger.info(Sensor.parse_obj(api_response))
     logger.info(EntityInput.parse_obj(api_response))
 except Exception as e:
-    logger.exception("Exception when calling ContextInformationProvisionApi->create_entity: %s\n" % e)
+    logger.exception("Exception when calling ContextInformationConsumptionApi->create_entity: %s\n" % e)
 
