@@ -48,7 +48,7 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
     $ poetry shell
     $ poetry install
     ```
-The virtual environment is now prepared and activated to be used.
+    The virtual environment is now prepared and activated to be used.
 8. Run the [sensor-tester/create-sensor-entity.py](sensor-tester/create-sensor-entity.py) Python script to create a sample NGSI-LD Entity as follow:
     ```bash
     $ python create-sensor-entity.py
