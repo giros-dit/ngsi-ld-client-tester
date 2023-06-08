@@ -1,0 +1,9 @@
+{
+    "@context": {
+            "Sensor": "https://iot-sensor.org/iot/Sensor",
+            "name": "https://iot-sensor.org/iot/Sensor/name",
+            "description": "https://iot-sensor.org/iot/Sensor/description",
+            "temperature": "https://iot-sensor.org/iot/Sensor/temperature",
+            "humidity": "https://iot-sensor.org/iot/Sensor/humidity"
+        }
+}

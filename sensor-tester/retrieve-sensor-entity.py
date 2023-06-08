@@ -1,7 +1,8 @@
 import logging
+import logging.config
 import os
 import json
-
+import yaml
 
 import ngsi_ld_client
 from ngsi_ld_client.models.sensor import Sensor
@@ -16,20 +17,19 @@ from ngsi_ld_client.api_client import ApiClient as NGSILDClient
 from ngsi_ld_client.configuration import Configuration as NGSILDConfiguration
 from ngsi_ld_client.exceptions import ApiException
 
+#assuming the log config file name is log.yml
+with open('logging.yaml', 'r') as stream:
+    config = yaml.load(stream, Loader=yaml.FullLoader)
+
+#read the file to logging config
+logging.config.dictConfig(config)
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-
-# create console handler and set level to debug
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-
-logger.addHandler(ch)
 
 # NGSI-LD Context Broker
 BROKER_URI = os.getenv("BROKER_URI", "http://localhost:1026/v2")
 # Context Catalog
 CONTEXT_CATALOG_URI = os.getenv("CONTEXT_CATALOG_URI",
-                                "http://localhost:8080/context/interface/context.jsonld")
+                                "http://localhost:8080/context.jsonld")
 
 
 # Init NGSI-LD Client
@@ -48,27 +48,13 @@ ngsi_ld.set_default_header(
     header_value="application/json"
 )
 
-sensor = Sensor(
-    id="urn:ngsi-ld:Sensor:3",
-    type="Sensor",
-    name=PropertyInput(type="Property", value="iot-sensor"),
-    description=PropertyInput(type="Property", value="IoT sensor"),
-    temperature=PropertyInput(type="Property", value=10),
-    humidity=PropertyInput(type="Property", value=20)
-)
-
-api_instance = ngsi_ld_client.ContextInformationProvisionApi(ngsi_ld)
-
-entity_input = sensor.dict(exclude_defaults=False, exclude_none=True, by_alias=False)
-#entity_input = sensor.json(exclude_defaults=False, exclude_none=True, by_alias=False)
-
-logger.info(entity_input)
-
-print(EntityInput.from_dict(entity_input))
+api_instance = ngsi_ld_client.ContextInformationConsumptionApi(ngsi_ld)
 
 try:
     # Entity creation 
-    api_instance.create_entity(entity_input=entity_input)
+    api_response = api_instance.retrieve_entity(entity_id='urn:ngsi-ld:iot:Sensor:1')
+    #logger.info(Sensor.parse_obj(api_response))
+    logger.info(EntityInput.parse_obj(api_response))
 except Exception as e:
     logger.exception("Exception when calling ContextInformationProvisionApi->create_entity: %s\n" % e)
 

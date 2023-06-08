@@ -5,18 +5,11 @@ formatters:
 handlers:
   console:
     class: logging.StreamHandler
+    level: INFO
     formatter: simple
     stream: ext://sys.stdout
 loggers:
-  uvicorn.error:
-    level: DEBUG
-    handlers: [console]
-    propagate: no
-  uvicorn.access:
-    level: DEBUG
-    handlers: [console]
-    propagate: no
-  uvicorn.:
+  simpleLogger:
     level: INFO
     handlers: [console]
     propagate: no
