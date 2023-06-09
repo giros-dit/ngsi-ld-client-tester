@@ -56,5 +56,5 @@ try:
     #logger.info(Sensor.parse_obj(api_response))
     logger.info(EntityInput.parse_obj(api_response))
 except Exception as e:
-    logger.exception("Exception when calling ContextInformationConsumptionApi->create_entity: %s\n" % e)
+    logger.exception("Exception when calling ContextInformationConsumptionApi->retrieve_entity: %s\n" % e)
 
