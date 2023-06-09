@@ -17,7 +17,7 @@ from ngsi_ld_client.api_client import ApiClient as NGSILDClient
 from ngsi_ld_client.configuration import Configuration as NGSILDConfiguration
 from ngsi_ld_client.exceptions import ApiException
 
-#assuming the log config file name is log.yml
+#assuming the log config file name is logging.yaml
 with open('logging.yaml', 'r') as stream:
     config = yaml.load(stream, Loader=yaml.FullLoader)
 

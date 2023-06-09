@@ -439,7 +439,7 @@ urllib3 = ">= 1.25.3"
 type = "git"
 url = "https://github.com/giros-dit/python-ngsi-ld-client.git"
 reference = "1.6.1"
-resolved_reference = "9f37a2ce0386672df92a0b5967bdf1f1239e94e4"
+resolved_reference = "05a2058b7738dd3c1cc9f6218443d839fb8f175e"
 
 [[package]]
 name = "orjson"

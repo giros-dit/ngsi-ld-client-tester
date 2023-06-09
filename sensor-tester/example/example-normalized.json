@@ -3,7 +3,7 @@
     "type": "Sensor",
     "name": {
         "type": "Property",
-        "value": "IoT sensor"
+        "value": "IoT-sensor"
     },
     "description": {
         "type": "Property",

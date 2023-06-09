@@ -17,7 +17,7 @@ from ngsi_ld_client.api_client import ApiClient as NGSILDClient
 from ngsi_ld_client.configuration import Configuration as NGSILDConfiguration
 from ngsi_ld_client.exceptions import ApiException
 
-#assuming the log config file name is log.yml
+#assuming the log config file name is logging.yaml
 with open('logging.yaml', 'r') as stream:
     config = yaml.load(stream, Loader=yaml.FullLoader)
 
@@ -51,8 +51,8 @@ ngsi_ld.set_default_header(
 sensor = Sensor(
     id="urn:ngsi-ld:iot:Sensor:1",
     type="Sensor",
-    name=PropertyInput(type="Property", value="iot-sensor"),
-    description=PropertyInput(type="Property", value="IoT sensor"),
+    name=PropertyInput(type="Property", value="IoT-sensor"),
+    description=PropertyInput(type="Property", value="IoT sensor for temperature and humidity."),
     temperature=PropertyInput(type="Property", value=10),
     humidity=PropertyInput(type="Property", value=20)
 )
