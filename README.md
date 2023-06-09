@@ -49,11 +49,11 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
     $ poetry install
     ```
     The virtual environment is now prepared and activated to be used.
-8. Run the [sensor-tester/create-sensor-entity.py](sensor-tester/create-sensor-entity.py) Python script to create a sample NGSI-LD Entity as follow:
+8. To create a sample NGSI-LD Entity, run the [sensor-tester/create-sensor-entity.py](sensor-tester/create-sensor-entity.py) Python script as follow:
     ```bash
     $ python create-sensor-entity.py
     ```
-9. Run the [sensor-tester/retrieve-sensor-entity.py](sensor-tester/retrieve-sensor-entity.py) Python script to retrieve the previously NGSI-LD Entity as follow:
+9. To retrieve the previously NGSI-LD Entity, run the [sensor-tester/retrieve-sensor-entity.py](sensor-tester/retrieve-sensor-entity.py) Python script  as follow:
     ```bash
     $ python retrieve-sensor-entity.py
     ```
