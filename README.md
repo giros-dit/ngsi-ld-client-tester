@@ -53,7 +53,7 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
     ```bash
     $ python create-sensor-entity.py
     ```
-9. To retrieve the previously NGSI-LD Entity, run the [sensor-tester/retrieve-sensor-entity.py](sensor-tester/retrieve-sensor-entity.py) Python script  as follow:
+9. To retrieve the previously created NGSI-LD Entity, run the [sensor-tester/retrieve-sensor-entity.py](sensor-tester/retrieve-sensor-entity.py) Python script as follow:
     ```bash
     $ python retrieve-sensor-entity.py
     ```
