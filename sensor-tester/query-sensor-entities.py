@@ -54,10 +54,11 @@ ngsi_ld.set_default_header(
 api_instance = ngsi_ld_client.ContextInformationConsumptionApi(ngsi_ld)
 
 try:
-    # Retrieve entity by id
-    api_response = api_instance.retrieve_entity(entity_id='urn:ngsi-ld:iot:Sensor:1')
-    logger.info(api_response.to_dict())
-    # logger.info(EntityOutput.from_dict(api_response.to_dict()).to_dict())
+    # Query NGSI-LD entities of type Sensor
+    api_response = api_instance.query_entity(type='Sensor')
+    sensor_entities = api_response
+    for sensor_entity in sensor_entities:
+        logger.info(sensor_entity.to_dict())
 except Exception as e:
-    logger.exception("Exception when calling ContextInformationConsumptionApi->retrieve_entity: %s\n" % e)
+    logger.exception("Exception when calling ContextInformationConsumptionApi->query_entity: %s\n" % e)
 

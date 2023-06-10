@@ -3,6 +3,7 @@ import logging.config
 import yaml
 import os
 import json
+import pdb
 
 import ngsi_ld_client
 from ngsi_ld_client.models.sensor import Sensor
@@ -34,6 +35,7 @@ CONTEXT_CATALOG_URI = os.getenv("CONTEXT_CATALOG_URI",
 
 # Init NGSI-LD Client
 configuration = NGSILDConfiguration(host=BROKER_URI)
+configuration.debug = True
 ngsi_ld = NGSILDClient(configuration=configuration)
 
 ngsi_ld.set_default_header(
@@ -51,23 +53,23 @@ ngsi_ld.set_default_header(
 sensor = Sensor(
     id="urn:ngsi-ld:iot:Sensor:1",
     type="Sensor",
-    name=PropertyInput(type="Property", value="IoT-sensor"),
-    description=PropertyInput(type="Property", value="IoT sensor for temperature and humidity."),
-    temperature=PropertyInput(type="Property", value=10),
-    humidity=PropertyInput(type="Property", value=20)
+    name={"type":"Property", "value": "IoT-sensor"},
+    description={"type": "Property", "value": "IoT sensor for temperature and humidity."},
+    temperature={"type": "Property", "value": 10},
+    humidity={"type": "Property", "value": 20}
 )
 
 api_instance = ngsi_ld_client.ContextInformationProvisionApi(ngsi_ld)
 
-entity_input = sensor.dict(exclude_defaults=False, exclude_none=True, by_alias=False)
+entity_input = sensor.to_dict()
 
 logger.info("Sensor object representation: %s\n" % entity_input)
 
 logger.info("EntityInput object representation: %s\n" % EntityInput.from_dict(entity_input))
 
 try:
-    # Entity creation 
-    api_instance.create_entity(entity_input=entity_input)
+    # Create NGSI-LD entity of type Sensor 
+    api_instance.create_entity(entity_input=EntityInput.from_dict(entity_input))
 except Exception as e:
     logger.exception("Exception when calling ContextInformationProvisionApi->create_entity: %s\n" % e)
 
