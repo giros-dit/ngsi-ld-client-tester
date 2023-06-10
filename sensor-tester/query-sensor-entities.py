@@ -6,14 +6,8 @@ import yaml
 
 import ngsi_ld_client
 from ngsi_ld_client.models.sensor import Sensor
-
-from ngsi_ld_client.models.entity_input import EntityInput
 from ngsi_ld_client.models.entity_output import EntityOutput
 
-from ngsi_ld_client.models.property_input import PropertyInput
-from ngsi_ld_client.models.relationship_input import RelationshipInput
-
-from ngsi_ld_client.models.entity_fragment_input import EntityFragmentInput
 from fastapi import FastAPI, Request, status
 from ngsi_ld_client.api_client import ApiClient as NGSILDClient
 from ngsi_ld_client.configuration import Configuration as NGSILDConfiguration
@@ -54,7 +48,7 @@ ngsi_ld.set_default_header(
 api_instance = ngsi_ld_client.ContextInformationConsumptionApi(ngsi_ld)
 
 try:
-    # Query NGSI-LD entities of type Sensor
+    # Query NGSI-LD entities of type Sensor: GET /entities
     api_response = api_instance.query_entity(type='Sensor')
     sensor_entities = api_response
     for sensor_entity in sensor_entities:

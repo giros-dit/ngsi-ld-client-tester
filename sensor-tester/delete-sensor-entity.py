@@ -6,8 +6,15 @@ import yaml
 
 import ngsi_ld_client
 from ngsi_ld_client.models.sensor import Sensor
+
+from ngsi_ld_client.models.entity_input import EntityInput
 from ngsi_ld_client.models.entity_output import EntityOutput
 
+from ngsi_ld_client.models.property_input import PropertyInput
+from ngsi_ld_client.models.relationship_input import RelationshipInput
+
+from ngsi_ld_client.models.entity_fragment_input import EntityFragmentInput
+from fastapi import FastAPI, Request, status
 from ngsi_ld_client.api_client import ApiClient as NGSILDClient
 from ngsi_ld_client.configuration import Configuration as NGSILDConfiguration
 from ngsi_ld_client.exceptions import ApiException
@@ -44,13 +51,11 @@ ngsi_ld.set_default_header(
     header_value="application/json"
 )
 
-api_instance = ngsi_ld_client.ContextInformationConsumptionApi(ngsi_ld)
+api_instance = ngsi_ld_client.ContextInformationProvisionApi(ngsi_ld)
 
 try:
-    # Retrieve NGSI-LD Entity by id: GET /entities/{entityId}
-    api_response = api_instance.retrieve_entity(entity_id='urn:ngsi-ld:iot:Sensor:1')
-    logger.info(api_response.to_dict())
-    # logger.info(EntityOutput.from_dict(api_response.to_dict()).to_dict())
+    # Delete NGSI-LD Entity by id: DELETE /entities/{entityId}
+    api_instance.delete_entity(entity_id='urn:ngsi-ld:iot:Sensor:1')
 except Exception as e:
-    logger.exception("Exception when calling ContextInformationConsumptionApi->retrieve_entity: %s\n" % e)
+    logger.exception("Exception when calling ContextInformationProvisionApi->delete_entity: %s\n" % e)
 
