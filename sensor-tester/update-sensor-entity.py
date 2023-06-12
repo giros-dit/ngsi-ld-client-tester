@@ -5,11 +5,11 @@ import json
 import yaml
 
 import ngsi_ld_client
-from ngsi_ld_client.models.sensor_all_of import SensorAllOf
+from ngsi_ld_models.models.sensor_all_of import SensorAllOf
 
 from ngsi_ld_client.models.entity_input import EntityInput
 from ngsi_ld_client.models.entity_output import EntityOutput
-from ngsi_ld_client.models.sensor_all_of_temperature import SensorAllOfTemperature
+from ngsi_ld_models.models.temperature_all_of import TemperatureAllOf
 
 from ngsi_ld_client.models.property_input import PropertyInput
 from ngsi_ld_client.models.property_fragment_input import PropertyFragmentInput
@@ -56,7 +56,6 @@ ngsi_ld.set_default_header(
 )
 
 sensor = SensorAllOf(
-    type=None,
     name={"type":"Property", "value": "IoT-sensor"},
     description={"type": "Property", "value": "IoT sensor for temperature and humidity."},
     temperature={"type": "Property", "value": 20},

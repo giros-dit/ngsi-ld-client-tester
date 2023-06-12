@@ -5,7 +5,8 @@ import json
 import yaml
 
 import ngsi_ld_client
-from ngsi_ld_client.models.sensor import Sensor
+
+from ngsi_ld_models.models.sensor import Sensor
 from ngsi_ld_client.models.entity_output import EntityOutput
 
 from fastapi import FastAPI, Request, status

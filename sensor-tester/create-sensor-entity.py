@@ -6,8 +6,8 @@ import json
 import pdb
 
 import ngsi_ld_client
-from ngsi_ld_client.models.sensor import Sensor
 
+from ngsi_ld_models.models.sensor import Sensor
 from ngsi_ld_client.models.entity_input import EntityInput
 
 from fastapi import FastAPI, Request, status

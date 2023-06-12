@@ -5,7 +5,7 @@ sys.path.append(parent_dir)
 
 import unittest
 
-from ngsi_ld_client.models.sensor import Sensor
+from ngsi_ld_models.models.sensor import Sensor
 
 class Sensors(unittest.TestCase):
     def test_interface(self):
