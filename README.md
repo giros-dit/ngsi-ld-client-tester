@@ -69,6 +69,9 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
     ```bash
     (sensor-tester-py3.9) $ python create-sensor-entity.py
     ```
+    > **Note:**
+    >
+    > If you want to create the NGSI-LD Entity from the XML file with sensor data, run the [sensor-tester/xml-parser-sensor.py] script. It reads the XML file, parses it and invocates the [sensor-tester/create-sensor-entity-args.py] script passing it the parsed data as arguments.
 8. To retrieve the previously created NGSI-LD Entity by using its `id` field, run the [sensor-tester/retrieve-sensor-entity.py](sensor-tester/retrieve-sensor-entity.py) Python script as follow:
     ```bash
     (sensor-tester-py3.9) $ python retrieve-sensor-entity.py
