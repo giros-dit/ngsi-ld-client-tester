@@ -40,7 +40,7 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
 5. To build the `ngsi_ld_models` library with the Python-generated classes for the sample NGSI-LD Entity of type `Sensor`, follow these steps:
     - Move to [`/ngsi-ld-models`](ngsi-ld-models/) folder:
         ```bash
-        $ cd sensor-tester
+        $ cd ngsi-ld-models
         ```
     - Install the dependencies for the `ngsi_ld_models` library with [Poetry](https://python-poetry.org/):
         ```bash
