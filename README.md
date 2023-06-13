@@ -42,7 +42,7 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
         ```bash
         $ cd sensor-tester
         ```
-    - Install the dependencies for the `ngsi_ld_models` library with [poetry](https://python-poetry.org/):
+    - Install the dependencies for the `ngsi_ld_models` library with [Poetry](https://python-poetry.org/):
         ```bash
         $ poetry install
         ```
@@ -58,8 +58,8 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
         ```
         > **Note:**
         >
-        > If you work with [`Visual Studio Code (VSC)`](https://code.visualstudio.com/) IDE, it is recommendable to open the `/sensor-tester` folder in an independet workspace so that the virtual environment can select the correct Python interpreter and thus recognize the source code well. In VSC you can specify the correct Python interpreter by using the [**Python: Select Interpreter** command](https://code.visualstudio.com/docs/python/environments#_working-with-python-interpreters) from the **Command Palette** (`Ctrl+Shift+P`).
-    - Setup the virtual environment with poetry:
+        > If you work with [Visual Studio Code (VSC)](https://code.visualstudio.com/) IDE, it is recommendable to open the `/sensor-tester` folder in an independet workspace so that the virtual environment can select the correct Python interpreter and thus recognize the source code well. In VSC you can specify the correct Python interpreter by using the [**Python: Select Interpreter** command](https://code.visualstudio.com/docs/python/environments#_working-with-python-interpreters) from the **Command Palette** (`Ctrl+Shift+P`).
+    - Setup the virtual environment with Poetry:
         ```bash
         $ poetry shell
         (sensor-tester-py3.9) $ poetry install
