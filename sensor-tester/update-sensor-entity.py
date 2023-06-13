@@ -56,6 +56,7 @@ ngsi_ld.set_default_header(
 )
 
 sensor = SensorAllOf(
+    type = None,
     name={"type":"Property", "value": "IoT-sensor"},
     description={"type": "Property", "value": "IoT sensor for temperature and humidity."},
     temperature={"type": "Property", "value": 20},
