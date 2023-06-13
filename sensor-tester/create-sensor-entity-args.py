@@ -55,7 +55,7 @@ ngsi_ld.set_default_header(
 )
 
 sensor = Sensor(
-    id="urn:ngsi-ld:iot:Sensor:1",
+    id="urn:ngsi-ld:iot:Sensor:2",
     type="Sensor",
     name={"type":"Property", "value": sensor_name},
     description={"type": "Property", "value": sensor_description},

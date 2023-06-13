@@ -16,11 +16,11 @@ import unittest
 import datetime
 
 import ngsi_ld_models
-from ngsi_ld_models.models.entity_output import EntityOutput  # noqa: E501
+from ngsi_ld_models.models.entity_common_type import EntityCommonType  # noqa: E501
 from ngsi_ld_models.rest import ApiException
 
-class TestEntityOutput(unittest.TestCase):
-    """EntityOutput unit test stubs"""
+class TestEntityCommonType(unittest.TestCase):
+    """EntityCommonType unit test stubs"""
 
     def setUp(self):
         pass
@@ -29,32 +29,23 @@ class TestEntityOutput(unittest.TestCase):
         pass
 
     def make_instance(self, include_optional):
-        """Test EntityOutput
+        """Test EntityCommonType
             include_option is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `EntityOutput`
+        # uncomment below to create an instance of `EntityCommonType`
         """
-        model = ngsi_ld_models.models.entity_output.EntityOutput()  # noqa: E501
+        model = ngsi_ld_models.models.entity_common_type.EntityCommonType()  # noqa: E501
         if include_optional :
-            return EntityOutput(
-                id = '', 
-                type = None, 
-                scope = None, 
-                location = None, 
-                observation_space = None, 
-                operation_space = None, 
-                created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                modified_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                deleted_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f')
+            return EntityCommonType(
             )
         else :
-            return EntityOutput(
+            return EntityCommonType(
         )
         """
 
-    def testEntityOutput(self):
-        """Test EntityOutput"""
+    def testEntityCommonType(self):
+        """Test EntityCommonType"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

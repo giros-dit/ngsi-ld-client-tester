@@ -3166,7 +3166,11 @@ components:
         type:
           description: |
             Entity Type(s). Both short hand string(s) (type name) or URI(s) are allowed.
-          type: string
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
         scope:
           description: |
             Scope.
