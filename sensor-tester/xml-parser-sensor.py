@@ -31,7 +31,7 @@ print(data)
 print('\n')
 
 print('CREATING NGSI-LD ENTITY GIVEN PARSED DATA...')
-# Runs create-sensor-entity.py script passing parsed XML data as arguments.
-subprocess.run(["python3.9", "create-sensor-entity.py", name, description, temperature, humidity])
+# Runs create-sensor-entity-args.py script passing parsed XML data as arguments.
+subprocess.run(["python3.9", "create-sensor-entity-args.py", name, description, temperature, humidity])
 
 # pdb.set_trace()

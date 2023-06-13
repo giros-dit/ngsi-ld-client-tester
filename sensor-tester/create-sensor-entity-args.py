@@ -2,6 +2,7 @@ import logging
 import logging.config
 import yaml
 import os
+import sys
 import json
 import pdb
 
@@ -29,6 +30,13 @@ BROKER_URI = os.getenv("BROKER_URI", "http://localhost:1026/v2")
 CONTEXT_CATALOG_URI = os.getenv("CONTEXT_CATALOG_URI",
                                 "http://localhost:8080/context.jsonld")
 
+# Retrieve invocation arguments.
+# Invocation must be: python/python3/python3.9 create-sensor-entity.py <sensor_name> <sensor_description> <sensor_temperature> <sensor_humidity>
+sensor_name = sys.argv[1]
+sensor_description = sys.argv[2]
+sensor_temperature = int(sys.argv[3]) # String data from invocation must be converted to Integer.
+sensor_humidity = int(sys.argv[4]) # String data from invocation must be converted to Integer.
+
 # Init NGSI-LD Client
 configuration = NGSILDConfiguration(host=BROKER_URI)
 configuration.debug = True
@@ -49,10 +57,10 @@ ngsi_ld.set_default_header(
 sensor = Sensor(
     id="urn:ngsi-ld:iot:Sensor:1",
     type="Sensor",
-    name={"type":"Property", "value": "IoT-Sensor"},
-    description={"type": "Property", "value": "IoT sensor for temperature and humidity"},
-    temperature={"type": "Property", "value": 10},
-    humidity={"type": "Property", "value": 20}
+    name={"type":"Property", "value": sensor_name},
+    description={"type": "Property", "value": sensor_description},
+    temperature={"type": "Property", "value": sensor_temperature},
+    humidity={"type": "Property", "value": sensor_humidity}
 )
 
 api_instance = ngsi_ld_client.ContextInformationProvisionApi(ngsi_ld)
