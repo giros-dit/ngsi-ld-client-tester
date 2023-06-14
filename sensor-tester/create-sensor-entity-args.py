@@ -25,10 +25,10 @@ logging.config.dictConfig(config)
 logger = logging.getLogger(__name__)
 
 # NGSI-LD Context Broker
-BROKER_URI = os.getenv("BROKER_URI", "http://localhost:1026/v2")
+BROKER_URI = os.getenv("BROKER_URI", "http://localhost:1026/ngsi-ld/v1")
 # Context Catalog
 CONTEXT_CATALOG_URI = os.getenv("CONTEXT_CATALOG_URI",
-                                "http://localhost:8080/context.jsonld")
+                                "http://context-catalog:8080/context.jsonld")
 
 # Retrieve invocation arguments.
 # Invocation must be: python/python3/python3.9 create-sensor-entity.py <sensor_name> <sensor_description> <sensor_temperature> <sensor_humidity>

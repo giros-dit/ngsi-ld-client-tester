@@ -1,6 +1,6 @@
 {
     "@context": [
-        "http://localhost:8080/context/sensor/context.jsonld",
+        "http://context-catalog:8080/context/sensor/context.jsonld",
         "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"
     ]
 }
