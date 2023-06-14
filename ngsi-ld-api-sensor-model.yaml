@@ -3196,7 +3196,13 @@ components:
           additionalProperties:
             oneOf:
               - $ref: '#/components/schemas/Property.Input'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Property.Input'
               - $ref: '#/components/schemas/Relationship.Input'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Relationship.Input'
     Entity.Input:
       description: |
         5.2.4 NGSI-LD Entity.
