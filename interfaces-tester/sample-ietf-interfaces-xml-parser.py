@@ -15,13 +15,12 @@ tree = et.parse('sample-ietf-interfaces.xml')
 
 root = tree.getroot()
 
-'''
-name = root.find('Sensor:name', ns).text
-description = root.find('Sensor:description', ns).text
-temperature = root.find('Sensor:temperature', ns).text
-humidity = root.find('Sensor:humidity', ns).text
-'''
+def print_data_recursively(element):
+    print(element.tag.split("}")[1] + " " + element.text)
+    for child in element:
+        print_data_recursively(child)
 
-data = {}
+for child in root:
+    print_data_recursively(child)
 
 # pdb.set_trace()
