@@ -92,15 +92,15 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
     ```bash
     (iot-sensors-tester-py3.9) $ python create-iot-device-entity.py
     ```
-3. To retrieve the previously created NGSI-LD Entity by using its `id` field, run the [iot-sensors-tester/retrieve-iot-device-entity.py](sensor-tester/retrieve-iot-device-entity.py) Python script as follow:
+3. To retrieve the previously created NGSI-LD Entity by using its `id` field, run the [iot-sensors-tester/retrieve-iot-device-entity.py](iot-sensors-tester/retrieve-iot-device-entity.py) Python script as follow:
     ```bash
     (iot-sensors-tester-py3.9) $ python retrieve-iot-device-entity.py
     ```
-4. To query all the NGSI-LD Entities of a particular type (e.g, NGSI-LD Entity of type `IotDevice`), run the [iot-sensors-tester/query-iot-device-entities.py](sensor-tester/query-iot-device-entities.py) Python script as follow:
+4. To query all the NGSI-LD Entities of a particular type (e.g, NGSI-LD Entity of type `IotDevice`), run the [iot-sensors-tester/query-iot-device-entities.py](iot-sensors-tester/query-iot-device-entities.py) Python script as follow:
     ```bash
     (iot-sensors-tester-py3.9) $ python query-iot-device-entities.py
     ```
-5. To update the previously created NGSI-LD Entity of type `IotDevice` by using its `id` field, run the [iot-sensors-tester/update-iot-device-entity.py](sensor-tester/update-iot-device-entity.py) Python script as follow:
+5. To update the previously created NGSI-LD Entity of type `IotDevice` by using its `id` field, run the [iot-sensors-tester/update-iot-device-entity.py](iot-sensors-tester/update-iot-device-entity.py) Python script as follow:
     ```bash
     (iot-sensors-tester-py3.9) $ python update-iot-device-entity.py
     ```
