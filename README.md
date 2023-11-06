@@ -58,7 +58,7 @@ To ease management of Python dependencies we rely on [Poetry](https://python-poe
     ```bash
     $ sudo apt-get install python-is-python3
     ```
-5. To build the `ngsi_ld_models` library with the Python-generated classes for the sample NGSI-LD Entities of type `IotDevice`, `TemperatureSenor`, and `HumiditySensor`, follow these steps:
+5. To build the `ngsi_ld_models` library with the Python-generated classes for the sample NGSI-LD Entities of type `IotDevice`, `TemperatureSensor`, and `HumiditySensor`, follow these steps:
     - Move to [`/ngsi-ld-models`](ngsi-ld-models/) folder:
         ```bash
         $ cd ngsi-ld-models
@@ -114,7 +114,7 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
 
     ![IoT Sensors NGSI-LD Information Model Instance](resources/images/iot-sensors-information-model-instance.png)
 
-7. To delete the previously created NGSI-LD Entities of type `IotDevice`, `TemperatureSenor`, and `HumiditySensor` by using its `id` field, run the [iot-sensors-tester/delete-iot-sensors-entities.py](iot-sensors-tester/delete-iot-sensors-entities.py) Python script as follow:
+7. To delete the previously created NGSI-LD Entities of type `IotDevice`, `TemperatureSensor`, and `HumiditySensor` by using its `id` field, run the [iot-sensors-tester/delete-iot-sensors-entities.py](iot-sensors-tester/delete-iot-sensors-entities.py) Python script as follow:
     ```bash
     (iot-sensors-tester-py3.9) $ python delete-iot-sensors-entities.py
     ```
