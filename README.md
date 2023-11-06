@@ -32,12 +32,12 @@ $ docker run --rm -v ${PWD}:/ngsi-ld-client-tester openapitools/openapi-generato
 
 > **Note 2:**
 >
-> By default, the OpenAPI Generator tool grants only access and permissions for the root user to the code generated. Change permissions and owner/group on the created directory `/ngsi-ld-models` using the following commands:
+> By default, the OpenAPI Generator tool grants only access for the root user to the code generated. Change the owner/group on the created directory `/ngsi-ld-models` using the following commands:
 > ```bash
 > $ cd ngsi-ld-models/
 > $ sudo su
-> $ chmod -R 755 .
 > $ chown -R <user>:<user> .
+> $ exit
 > ```
 
 The high-level schema representation for its NGSI-LD information model is depicted below:

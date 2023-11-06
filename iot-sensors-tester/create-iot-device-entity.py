@@ -49,8 +49,7 @@ iot_device = IotDevice(
     type="IotDevice",
     name={"type":"Property", "value": "IoTDevice"},
     description={"type": "Property", "value": "IoT device with sensors."},
-    hasSensor={"type": "Relationship", "object": "urn:ngsi-ld:TemperatureSensor:1"}
-    #hasSensor=[{"type": "Relationship", "object": "urn:ngsi-ld:TemperatureSensor:1"},{"type": "Relationship", "object": "urn:ngsi-ld:HumiditySensor:1"}]
+    hasSensor=[{"type": "Relationship", "object": "urn:ngsi-ld:TemperatureSensor:1"},{"type": "Relationship", "object": "urn:ngsi-ld:HumiditySensor:1"}]
 )
 
 api_instance = ngsi_ld_client.ContextInformationProvisionApi(ngsi_ld)
