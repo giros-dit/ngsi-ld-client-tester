@@ -1,0 +1,9 @@
+{
+    "id": "urn:ngsi-ld:HumiditySensor:1",
+    "type": "HumiditySensor",
+    "humidity": {
+        "type": "Property",
+        "value": 30.8,
+        "unitCode": "P1"
+    }
+}

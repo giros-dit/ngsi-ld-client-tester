@@ -1,6 +1,0 @@
-<sensor xmlns="https://iot-sensor.org/iot/Sensor">
-    <name>IoT-Sensor</name>
-    <description>IoT sensor for temperature and humidity</description>
-    <temperature>10</temperature>
-    <humidity>20</humidity>
-</sensor>

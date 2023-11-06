@@ -1,0 +1,22 @@
+{
+    "id": "urn:ngsi-ld:IotDevice:1",
+    "type": "IotDevice",
+    "name": {
+        "type": "Property",
+        "value": "IoT-Device"
+    },
+    "description": {
+        "type": "Property",
+        "value": "IoT device with sensors.."
+    },
+    "hasSensor": [
+        {
+            "type": "Relationship",
+            "object": "urn:ngsi-ld:TemperatureSensor:1"
+        },
+        {
+            "type": "Relationship",
+            "object": "urn:ngsi-ld:HumiditySensor:1"
+        }
+    ]
+}

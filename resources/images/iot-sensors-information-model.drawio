@@ -1,0 +1,106 @@
+<mxfile host="Electron" modified="2023-11-06T14:45:17.627Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.0.3 Chrome/114.0.5735.289 Electron/25.8.4 Safari/537.36" etag="rb5TNnKj4zozb8pmSw54" version="22.0.3" type="device" pages="2">
+  <diagram name="schema" id="-U8rRpyTSq4u7GKG51dM">
+    <mxGraphModel dx="1026" dy="681" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="voWmRa2pXaKrDhGQnHco-1" value="&lt;font face=&quot;Tahoma&quot;&gt;&lt;i style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;&amp;lt;&amp;lt;entity&amp;gt;&amp;gt;&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;/font&gt;&lt;b&gt;IotDevice&lt;/b&gt;" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=39;horizontalStack=0;rounded=0;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#fff2cc;strokeColor=#d6b656;arcSize=19;spacingBottom=2;html=1;" parent="1" vertex="1">
+          <mxGeometry x="164" y="311" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="voWmRa2pXaKrDhGQnHco-2" value="* name: string&lt;br&gt;o description: string" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;fontFamily=Verdana;" parent="voWmRa2pXaKrDhGQnHco-1" vertex="1">
+          <mxGeometry y="39" width="250" height="41" as="geometry" />
+        </mxCell>
+        <mxCell id="voWmRa2pXaKrDhGQnHco-3" value="&lt;font style=&quot;font-size: 12px;&quot; face=&quot;Tahoma&quot;&gt;&amp;lt;&amp;lt;entity&amp;gt;&amp;gt;&lt;/font&gt;&lt;br&gt;&lt;span style=&quot;font-style: normal;&quot;&gt;&lt;b&gt;TemperatureSensor&lt;/b&gt;&lt;/span&gt;" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;rounded=0;fontSize=14;fontStyle=2;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#fff2cc;strokeColor=#d6b656;spacingBottom=2;arcSize=19;fixDash=0;autosize=1;container=1;backgroundOutline=0;enumerate=0;noLabel=0;html=1;" parent="1" vertex="1">
+          <mxGeometry x="490" y="230" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="voWmRa2pXaKrDhGQnHco-5" value="* temperature: number" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=middle;resizable=0;rotatable=0;part=1;spacingBottom=0;html=1;fontFamily=Verdana;spacing=2;horizontal=1;autosize=1;resizeWidth=0;resizeHeight=0;" parent="voWmRa2pXaKrDhGQnHco-3" vertex="1">
+          <mxGeometry y="40" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="voWmRa2pXaKrDhGQnHco-6" value="&lt;font style=&quot;font-size: 12px;&quot; face=&quot;Tahoma&quot;&gt;&amp;lt;&amp;lt;entity&amp;gt;&amp;gt;&lt;/font&gt;&lt;br&gt;&lt;span style=&quot;font-style: normal;&quot;&gt;&lt;b&gt;HumiditySensor&lt;/b&gt;&lt;/span&gt;" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;rounded=0;fontSize=14;fontStyle=2;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#fff2cc;strokeColor=#d6b656;spacingBottom=2;arcSize=19;fixDash=0;autosize=1;container=1;backgroundOutline=0;enumerate=0;noLabel=0;html=1;" parent="1" vertex="1">
+          <mxGeometry x="490" y="400" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="voWmRa2pXaKrDhGQnHco-7" value="* humidity: number" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=middle;resizable=0;rotatable=0;part=1;spacingBottom=0;html=1;fontFamily=Verdana;spacing=2;horizontal=1;autosize=1;resizeWidth=0;resizeHeight=0;" parent="voWmRa2pXaKrDhGQnHco-6" vertex="1">
+          <mxGeometry y="40" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="voWmRa2pXaKrDhGQnHco-10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;jumpSize=8;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;fontSize=12;fontColor=#000000;startArrow=open;startFill=0;endArrow=oval;endFill=1;startSize=10;endSize=4;exitX=0.5;exitY=0;exitDx=0;exitDy=0;strokeWidth=1;" parent="1" source="voWmRa2pXaKrDhGQnHco-6" edge="1">
+          <mxGeometry x="0.071" y="-11" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="615" y="360" />
+            </Array>
+            <mxPoint x="625" y="320" as="sourcePoint" />
+            <mxPoint x="615" y="360" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="voWmRa2pXaKrDhGQnHco-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=open;endFill=0;startSize=4;endSize=10;" parent="1" source="voWmRa2pXaKrDhGQnHco-2" target="voWmRa2pXaKrDhGQnHco-5" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="414" y="360" />
+              <mxPoint x="615" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="voWmRa2pXaKrDhGQnHco-12" value="&lt;font face=&quot;Verdana&quot; style=&quot;font-size: 12px;&quot;&gt;hasSensor&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="voWmRa2pXaKrDhGQnHco-11" vertex="1" connectable="0">
+          <mxGeometry x="0.0114" y="1" relative="1" as="geometry">
+            <mxPoint x="-21" y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_L3FRz4O-gy1xlna3gWk-1" value="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="414" y="340" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="_L3FRz4O-gy1xlna3gWk-2" value="N" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="590" y="340" width="20" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="lVq_1g_pCwZ7buvHjpqm" name="instance">
+    <mxGraphModel dx="1026" dy="681" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Z3KZdV1z-FpotFy621Re-1" value="&lt;i style=&quot;&quot;&gt;&lt;font face=&quot;Verdana&quot;&gt;urn:ngsi-ld:IotDevice:1&lt;/font&gt;&lt;/i&gt;" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=39;horizontalStack=0;rounded=0;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#fff2cc;strokeColor=#d6b656;arcSize=19;spacingBottom=2;html=1;" parent="1" vertex="1">
+          <mxGeometry x="164" y="311" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Z3KZdV1z-FpotFy621Re-2" value="name = &quot;IoTDevice&quot;&lt;br&gt;description = &quot;IoT device with sensors.&lt;span style=&quot;background-color: initial;&quot;&gt;&quot;&lt;/span&gt;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;fontFamily=Verdana;" parent="Z3KZdV1z-FpotFy621Re-1" vertex="1">
+          <mxGeometry y="39" width="250" height="41" as="geometry" />
+        </mxCell>
+        <mxCell id="Z3KZdV1z-FpotFy621Re-3" value="&lt;i style=&quot;border-color: var(--border-color);&quot;&gt;&lt;font face=&quot;Verdana&quot;&gt;urn:ngsi-ld:TemperatureSensor:1&lt;/font&gt;&lt;/i&gt;" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=38;horizontalStack=0;rounded=0;fontSize=14;fontStyle=2;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#fff2cc;strokeColor=#d6b656;spacingBottom=2;arcSize=19;fixDash=0;autosize=1;container=1;backgroundOutline=0;enumerate=0;noLabel=0;html=1;" parent="1" vertex="1">
+          <mxGeometry x="490" y="230" width="280" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Z3KZdV1z-FpotFy621Re-4" value="temperature =&amp;nbsp;27.9 (unitCode = &quot;CEL&quot;)" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=middle;resizable=0;rotatable=0;part=1;spacingBottom=0;html=1;fontFamily=Verdana;spacing=2;horizontal=1;autosize=1;resizeWidth=0;resizeHeight=0;" parent="Z3KZdV1z-FpotFy621Re-3" vertex="1">
+          <mxGeometry y="38" width="280" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="Z3KZdV1z-FpotFy621Re-5" value="&lt;i style=&quot;border-color: var(--border-color);&quot;&gt;&lt;font face=&quot;Verdana&quot;&gt;urn:ngsi-ld:HumiditySensor:1&lt;/font&gt;&lt;/i&gt;" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=38;horizontalStack=0;rounded=0;fontSize=14;fontStyle=2;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fillColor=#fff2cc;strokeColor=#d6b656;spacingBottom=2;arcSize=19;fixDash=0;autosize=1;container=1;backgroundOutline=0;enumerate=0;noLabel=0;html=1;" parent="1" vertex="1">
+          <mxGeometry x="490" y="400" width="280" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Z3KZdV1z-FpotFy621Re-6" value="humidity=&amp;nbsp;30.8 (unitCode = &quot;P1&quot;)" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=middle;resizable=0;rotatable=0;part=1;spacingBottom=0;html=1;fontFamily=Verdana;spacing=2;horizontal=1;autosize=1;resizeWidth=0;resizeHeight=0;" parent="Z3KZdV1z-FpotFy621Re-5" vertex="1">
+          <mxGeometry y="38" width="280" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="Z3KZdV1z-FpotFy621Re-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;jumpSize=8;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;fontSize=12;fontColor=#000000;startArrow=open;startFill=0;endArrow=oval;endFill=1;startSize=10;endSize=4;exitX=0.5;exitY=0;exitDx=0;exitDy=0;strokeWidth=1;" parent="1" source="Z3KZdV1z-FpotFy621Re-5" edge="1">
+          <mxGeometry x="0.071" y="-11" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="630" y="380" />
+              <mxPoint x="630" y="380" />
+            </Array>
+            <mxPoint x="625" y="320" as="sourcePoint" />
+            <mxPoint x="630" y="360" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Z3KZdV1z-FpotFy621Re-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=open;endFill=0;startSize=4;endSize=10;" parent="1" source="Z3KZdV1z-FpotFy621Re-2" target="Z3KZdV1z-FpotFy621Re-4" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="630" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Z3KZdV1z-FpotFy621Re-9" value="&lt;font style=&quot;font-size: 12px;&quot; face=&quot;Verdana&quot;&gt;hasSensor&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="Z3KZdV1z-FpotFy621Re-8" vertex="1" connectable="0">
+          <mxGeometry x="0.0114" y="1" relative="1" as="geometry">
+            <mxPoint x="-21" y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
