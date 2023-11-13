@@ -7,7 +7,7 @@
     },
     "description": {
         "type": "Property",
-        "value": "IoT device with sensors.."
+        "value": "IoT device with sensors."
     },
     "hasSensor": [
         {

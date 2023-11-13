@@ -48,13 +48,27 @@ ngsi_ld.set_default_header(
     header_value="application/json"
 )
 
-options = []
+options_param = []
 
 api_instance = ngsi_ld_client.ContextInformationConsumptionApi(ngsi_ld)
 
+#sysAttrs = OptionsSysAttrs('sysAttrs')
+
+#sysAttrs = QueryEntityOptionsParameterInner(OptionsSysAttrs.SYSATTRS)
+
+sysAttrs = OptionsSysAttrs('sysAttrs')
+
+entity_params = QueryEntityOptionsParameterInner.from_dict(sysAttrs)
+
+logger.info(type(sysAttrs))
+logger.info(sysAttrs)
+logger.info(entity_params)
+logger.info(type(entity_params))
+options_param.append(entity_params)
+
 try:
     # Query NGSI-LD entities of type Sensor: GET /entities
-    api_response = api_instance.query_entity(type='IotDevice')
+    api_response = api_instance.query_entity(type='IotDevice', options=options_param)
     iot_device_entities = api_response
     for iot_device_entity in iot_device_entities:
         logger.info(iot_device_entity.to_dict())

@@ -5013,7 +5013,7 @@ components:
               minimum: 1
         - required:
           - entities
-          - timeInterval
+         # - timeInterval
     Subscription.OnChange:
       allOf:
         - $ref: '#/components/schemas/Subscription.Common'
@@ -5129,7 +5129,6 @@ components:
         - required:
             - type
             - name
-            - hasSensor
     Name:
       description: NGSI-LD Property Type. The IoT device name.
       additionalProperties: false
@@ -5156,26 +5155,11 @@ components:
       description: |
         NGSI-LD Relationship Type to identify the sensors of the IoT device.
       oneOf:
+        - $ref: '#/components/schemas/Relationship'
         - type: array
           items:
-            allOf:
-              - $ref: '#/components/schemas/Relationship'
-              - type: object
-                properties:
-                  object:
-                    type: string
-                required:
-                  - object
-            additionalProperties: false
-        - allOf:
-            - $ref: '#/components/schemas/Relationship'
-            - type: object
-              properties:
-                object:
-                  type: string
-              required:
-                - object
-          additionalProperties: false
+            $ref: '#/components/schemas/Relationship'
+      additionalProperties: false
     TemperatureSensor:
       description: | 
         NGSI-LD Entity Type that represents a temperature sensor.
@@ -5205,6 +5189,7 @@ components:
               type: number
           required:
             - value 
+      additionalProperties: false
     HumiditySensor:
       description: | 
         NGSI-LD Enitity Type that represents a humidity sensor.
@@ -5234,6 +5219,7 @@ components:
               type: number
           required:
             - value
+      additionalProperties: false
   responses:
     BadRequest:
       description: |

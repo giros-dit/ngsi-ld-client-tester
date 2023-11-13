@@ -59,7 +59,7 @@ logger.info("HumiditySensor object representation: %s\n" % entity_input)
 logger.info("Entity object representation: %s\n" % Entity.from_dict(entity_input))
 
 try:
-    # Update NGSI-LD Entity by id: PATCH /entities/{entityId}/attrs
+    # Update attributes of NGSI-LD Entity by id: PATCH /entities/{entityId}/attrs
     api_instance.update_entity(entity_id='urn:ngsi-ld:HumiditySensor:1', entity=Entity.from_dict(entity_input))
 except Exception as e:
     logger.exception("Exception when calling ContextInformationProvisionApi->update_entity: %s\n" % e)

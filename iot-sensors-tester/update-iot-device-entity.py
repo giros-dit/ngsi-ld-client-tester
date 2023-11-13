@@ -47,9 +47,7 @@ ngsi_ld.set_default_header(
 
 iot_device = IotDevice(
     type="IotDevice",
-    name={"type":"Property", "value": "IoT Device"},
-    description={"type": "Property", "value": "IoT device with temperature and humidity sensors."},
-    hasSensor=[{"type": "Relationship", "object": "urn:ngsi-ld:TemperatureSensor:1"},{"type": "Relationship", "object": "urn:ngsi-ld:HumiditySensor:1"},{"type": "Relationship", "object": "urn:ngsi-ld:TemperatureSensor:2"}]
+    name={"type":"Property", "value": "IoT Device"}
 )
 
 api_instance = ngsi_ld_client.ContextInformationProvisionApi(ngsi_ld)
@@ -61,7 +59,7 @@ logger.info("IotDevice object representation: %s\n" % entity_input)
 logger.info("Entity object representation: %s\n" % Entity.from_dict(entity_input))
 
 try:
-    # Update NGSI-LD Entity by id: PATCH /entities/{entityId}/attrs
+    # Update attributes of NGSI-LD Entity by id: PATCH /entities/{entityId}/attrs
     api_instance.update_entity(entity_id='urn:ngsi-ld:IotDevice:1', entity=Entity.from_dict(entity_input))
 except Exception as e:
     logger.exception("Exception when calling ContextInformationProvisionApi->update_entity: %s\n" % e)

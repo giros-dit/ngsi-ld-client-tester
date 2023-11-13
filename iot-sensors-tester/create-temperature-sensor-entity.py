@@ -64,7 +64,7 @@ query_entity_input = QueryEntity200ResponseInner.from_dict(entity_input)
 
 try:
     # Create NGSI-LD entity of type Sensor: POST /entities
-    api_instance.create_entity(query_entity200_response_inner=query_entity_input.from_dict(entity_input))
+    api_instance.create_entity(query_entity200_response_inner=query_entity_input)
 except Exception as e:
     logger.exception("Exception when calling ContextInformationProvisionApi->create_entity: %s\n" % e)
 

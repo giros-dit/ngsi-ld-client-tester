@@ -1,20 +1,21 @@
 import logging
 import logging.config
 import os
-from typing import List
 import yaml
 
 import ngsi_ld_client
 
 from ngsi_ld_models.models.iot_device import IotDevice
+from ngsi_ld_models.models.has_sensor import HasSensor
+from ngsi_ld_models.models.name import Name
 from ngsi_ld_client.models.entity import Entity
-from ngsi_ld_client.models.query_entity_options_parameter_inner import QueryEntityOptionsParameterInner
-from ngsi_ld_client.models.options_sys_attrs import OptionsSysAttrs
-
+from ngsi_ld_client.models.model_property import ModelProperty
+from ngsi_ld_client.models.property_value import PropertyValue
 
 from ngsi_ld_client.api_client import ApiClient as NGSILDClient
 from ngsi_ld_client.configuration import Configuration as NGSILDConfiguration
 from ngsi_ld_client.exceptions import ApiException
+from ngsi_ld_client.models.replace_attrs_request import ReplaceAttrsRequest
 
 #assuming the log config file name is logging.yaml
 with open('logging.yaml', 'r') as stream:
@@ -48,15 +49,23 @@ ngsi_ld.set_default_header(
     header_value="application/json"
 )
 
-options = []
+iot_device = IotDevice(
+    type="IotDevice",
+    name={"type":"Property", "value": "IoTDevice"},
+    hasSensor=HasSensor.from_dict([{"type": "Relationship", "object": "urn:ngsi-ld:TemperatureSensor:1"},{"type": "Relationship", "object": "urn:ngsi-ld:HumiditySensor:1"}]) 
+)
 
-api_instance = ngsi_ld_client.ContextInformationConsumptionApi(ngsi_ld)
+api_instance = ngsi_ld_client.ContextInformationProvisionApi(ngsi_ld)
 
+entity_input = iot_device.to_dict()
+
+logger.info("IotDevice object representation: %s\n" % entity_input)
+
+logger.info("Entity object representation: %s\n" % Entity.from_dict(entity_input))
+       
 try:
-    # Query NGSI-LD entities of type Sensor: GET /entities
-    api_response = api_instance.query_entity(type='IotDevice')
-    iot_device_entities = api_response
-    for iot_device_entity in iot_device_entities:
-        logger.info(iot_device_entity.to_dict())
+    # Append attributes to Entity: POST /entities/{entityId}/attrs
+    api_instance.append_attrs(entity_id='urn:ngsi-ld:IotDevice:1', entity=Entity.from_dict(entity_input))
 except Exception as e:
-    logger.exception("Exception when calling ContextInformationConsumptionApi->query_entity: %s\n" % e)
+    logger.exception("Exception when calling ContextInformationProvisionApi->append_attrs: %s\n" % e)
+

@@ -57,7 +57,7 @@ class QuerySubscription200ResponseInner(BaseModel):
     status: Optional[StrictStr] = Field(default=None, description="Read-only. Provided by the system when querying the details of a subscription. ")
     watched_attributes: Optional[Annotated[List[StrictStr], Field(min_length=1)]] = Field(default=None, description="Watched Attributes (Properties or Relationships). If not defined it means any Attribute. ", alias="watchedAttributes")
     throttling: Optional[Union[Annotated[float, Field(strict=True, ge=1)], Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Minimal period of time in seconds which shall elapse between two consecutive notifications. ")
-    time_interval: Union[Annotated[float, Field(strict=True, ge=1)], Annotated[int, Field(strict=True, ge=1)]] = Field(description="Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached. ", alias="timeInterval")
+    time_interval: Optional[Union[Annotated[float, Field(strict=True, ge=1)], Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Indicates that a notification shall be delivered periodically regardless of attribute changes. Actually, when the time interval (in seconds) specified in this value field is reached. ", alias="timeInterval")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "type", "subscriptionName", "description", "entities", "notificationTrigger", "q", "geoQ", "csf", "isActive", "notification", "expiresAt", "temporalQ", "scopeQ", "lang", "createdAt", "modifiedAt", "deletedAt", "status", "watchedAttributes", "throttling", "timeInterval"]
 

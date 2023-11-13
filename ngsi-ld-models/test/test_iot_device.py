@@ -53,17 +53,12 @@ class TestIotDevice(unittest.TestCase):
                 deleted_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 name = None,
                 description = None,
-                has_sensor = [
-                    null
-                    ]
+                has_sensor = None
             )
         else:
             return IotDevice(
                 type = 'IotDevice',
                 name = None,
-                has_sensor = [
-                    null
-                    ],
         )
         """
 

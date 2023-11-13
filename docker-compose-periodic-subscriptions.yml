@@ -11,7 +11,7 @@ services:
     volumes:
       - ./docker/context-catalog:/web
   orion:
-    image: fiware/orion-ld
+    image: fiware/orion-ld:1.5.0-PRE-1527
     hostname: orion
     container_name: fiware-orion
     expose:

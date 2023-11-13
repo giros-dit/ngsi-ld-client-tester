@@ -24,7 +24,7 @@ from pydantic import Field
 from ngsi_ld_models.models.description import Description
 from ngsi_ld_models.models.entity_scope import EntityScope
 from ngsi_ld_models.models.geo_property import GeoProperty
-from ngsi_ld_models.models.has_sensor_inner import HasSensorInner
+from ngsi_ld_models.models.has_sensor import HasSensor
 from ngsi_ld_models.models.name import Name
 from typing import Dict, Any
 try:
@@ -47,7 +47,7 @@ class IotDevice(BaseModel):
     deleted_at: Optional[datetime] = Field(default=None, description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ", alias="deletedAt")
     name: Name
     description: Optional[Description] = None
-    has_sensor: Optional[List[HasSensorInner]] = Field(alias="hasSensor")
+    has_sensor: Optional[HasSensor] = Field(default=None, alias="hasSensor")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "type", "scope", "location", "observationSpace", "operationSpace", "createdAt", "modifiedAt", "deletedAt", "name", "description", "hasSensor"]
 
@@ -120,22 +120,13 @@ class IotDevice(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of description
         if self.description:
             _dict['description'] = self.description.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of each item in has_sensor (list)
-        _items = []
+        # override the default output from pydantic by calling `to_dict()` of has_sensor
         if self.has_sensor:
-            for _item in self.has_sensor:
-                if _item:
-                    _items.append(_item.to_dict())
-            _dict['hasSensor'] = _items
+            _dict['hasSensor'] = self.has_sensor.to_dict()
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
                 _dict[_key] = _value
-
-        # set to None if has_sensor (nullable) is None
-        # and model_fields_set contains the field
-        if self.has_sensor is None and "has_sensor" in self.model_fields_set:
-            _dict['hasSensor'] = None
 
         return _dict
 
@@ -160,7 +151,7 @@ class IotDevice(BaseModel):
             "deletedAt": obj.get("deletedAt"),
             "name": Name.from_dict(obj.get("name")) if obj.get("name") is not None else None,
             "description": Description.from_dict(obj.get("description")) if obj.get("description") is not None else None,
-            "hasSensor": [HasSensorInner.from_dict(_item) for _item in obj.get("hasSensor")] if obj.get("hasSensor") is not None else None
+            "hasSensor": HasSensor.from_dict(obj.get("hasSensor")) if obj.get("hasSensor") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

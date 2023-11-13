@@ -42,7 +42,6 @@ class Temperature(BaseModel):
     deleted_at: Optional[datetime] = Field(default=None, description="Is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8 It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ", alias="deletedAt")
     instance_id: Optional[StrictStr] = Field(default=None, description="A URI uniquely identifying a Property instance, as mandated by (see clause 4.5.7). System generated. ", alias="instanceId")
     previous_value: Optional[PropertyPreviousValue] = Field(default=None, alias="previousValue")
-    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["type", "value", "observedAt", "unitCode", "datasetId", "createdAt", "modifiedAt", "deletedAt", "instanceId", "previousValue"]
 
     @field_validator('type')
@@ -88,7 +87,6 @@ class Temperature(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * OpenAPI `readOnly` fields are excluded.
         * OpenAPI `readOnly` fields are excluded.
-        * Fields in `self.additional_properties` are added to the output dict.
         """
         _dict = self.model_dump(
             by_alias=True,
@@ -97,18 +95,12 @@ class Temperature(BaseModel):
                 "modified_at",
                 "deleted_at",
                 "instance_id",
-                "additional_properties",
             },
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of previous_value
         if self.previous_value:
             _dict['previousValue'] = self.previous_value.to_dict()
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
-
         return _dict
 
     @classmethod
@@ -119,6 +111,11 @@ class Temperature(BaseModel):
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
+
+        # raise errors for additional fields in the input
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                raise ValueError("Error due to additional fields (not defined in Temperature) in the input: " + _key)
 
         _obj = cls.model_validate({
             "type": obj.get("type") if obj.get("type") is not None else 'Property',
@@ -132,11 +129,6 @@ class Temperature(BaseModel):
             "instanceId": obj.get("instanceId"),
             "previousValue": PropertyPreviousValue.from_dict(obj.get("previousValue")) if obj.get("previousValue") is not None else None
         })
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
-
         return _obj
 
 
