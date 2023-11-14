@@ -31,6 +31,3 @@ venv
 docker-compose*
 docs
 README.md
-
-# Additional 
-/tests
