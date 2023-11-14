@@ -1,0 +1,818 @@
+{
+	"info": {
+		"_postman_id": "0c47e963-5c8e-494a-9579-f06f0b5107d5",
+		"name": "ORION-LD_subscription_tester_IoT_Sensors",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13163340",
+		"_collection_link": "https://grey-crescent-786319.postman.co/workspace/ngsi-ld_orion_tester~5d3f33f9-8f62-4272-995b-243e0d133359/collection/13163340-0c47e963-5c8e-494a-9579-f06f0b5107d5?action=share&source=collection_link&creator=13163340"
+	},
+	"item": [
+		{
+			"name": "Orion-LD: Obtain Version Information",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{broker}}/version",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"version"
+					]
+				},
+				"description": "You can check if the Scorpio Context Broker is running by making an HTTP request to the exposed port."
+			},
+			"response": []
+		},
+		{
+			"name": "Create IotDevice entity",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"urn:ngsi-ld:IotDevice:1\",\n    \"type\": \"IotDevice\",\n    \"name\": {\n        \"type\": \"Property\",\n        \"value\": \"IoTDevice\"\n    },\n    \"hasSensor\": {\n        \"type\": \"Relationship\", \n        \"object\": \"urn:ngsi-ld:TemperatureSensor:1\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						""
+					]
+				},
+				"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+			},
+			"response": []
+		},
+		{
+			"name": "Create TemperatureSensor entity",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"urn:ngsi-ld:TemperatureSensor:1\",\n    \"type\": \"TemperatureSensor\",\n    \"temperature\": {\n        \"type\": \"Property\",\n        \"value\": 27.9,\n        \"unitCode\": \"CEL\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						""
+					]
+				},
+				"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+			},
+			"response": []
+		},
+		{
+			"name": "Create HumiditySensor entity",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"urn:ngsi-ld:HumiditySensor:1\",\n    \"type\": \"HumiditySensor\",\n    \"humidity\": {\n        \"type\": \"Property\",\n        \"value\": 30.8,\n        \"unitCode\": \"P1\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						""
+					]
+				},
+				"description": "New context data entities can be created by making a POST request to the `/ngsi-ld/v1/entities` endpoint and supply an `@context` along with structured **NGSI-LD** data.\n\nThe first request will take some time, as the context broker must navigate and load all of the files mentioned in the\n`@context`.\n\nSince the `Content-Type: application/ld+json` the `@context` is supplied in the body of the request. As with all **NGSI-LD** interactions, the core **NGSI-LD** `@context` ([`https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld`](https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld) is implicitly included as well.)\n\nThis means that the actual `@context` is:\n\n```jsonld\n{\n    \"@context\": [\n        \"http://context-provider:3000/data-models/ngsi-context.jsonld\",\n        \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.3.jsonld\"\n    ]\n}\n```\n\nwith the core `@context` being processed **last** and therefore overriding any terms previously defined with the same `@id`."
+			},
+			"response": []
+		},
+		{
+			"name": "Obtain Entity Data by Type field",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=IotDevice",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "IotDevice"
+						}
+					]
+				},
+				"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+			},
+			"response": []
+		},
+		{
+			"name": "Obtain Entity Data by type with the sysAttrs",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/?type=IotDevice&options=sysAttrs",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "IotDevice"
+						},
+						{
+							"key": "options",
+							"value": "sysAttrs"
+						}
+					]
+				},
+				"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+			},
+			"response": []
+		},
+		{
+			"name": "Obtain Entity Data by id field",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:IotDevice:1",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						"urn:ngsi-ld:IotDevice:1"
+					]
+				},
+				"description": "This example returns the data of `urn:ngsi-ld:Building:farm001`. The NGSI-LD `@context` is supplied as a [`Link` header](https://www.w3.org/wiki/LinkHeader) to define the entities returned. The `ngsi-context.jsonld` `@context` file is just supplying short names for every attribute.\n\nThe full link header syntax can be seen below:\n\n```text\nLink: <https://fiware.github.io/data-models/context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\n```\n\nThe standard HTTP `Link` header allows metadata (in this case the `@context`) to be passed in without actually touching\nthe resource in question. In the case of NGSI-LD, the metadata is a file in `application/ld+json` format."
+			},
+			"response": []
+		},
+		{
+			"name": "Update Entity (IotDevice)",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": {\r\n        \"type\": \"Property\",\r\n        \"value\": \"IoT-Device\"\r\n    },\r\n    \"hasSensor\": {\r\n        \"type\": \"Relationship\", \r\n        \"object\": [\"urn:ngsi-ld:TemperatureSensor:1\", \"urn:ngsi-ld:HumiditySensor:1\"]\r\n    }\r\n}\r\n"
+				},
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:IotDevice:1/attrs",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						"urn:ngsi-ld:IotDevice:1",
+						"attrs"
+					]
+				},
+				"description": "partially update the attribute of entity"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Entity (TemperatureSensor)",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"temperature\": {\r\n        \"type\":\"Property\", \r\n        \"value\": 25.9, \r\n        \"unitCode\": \"CEL\"\r\n    }\r\n}\r\n"
+				},
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:TemperatureSensor:1/attrs",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						"urn:ngsi-ld:TemperatureSensor:1",
+						"attrs"
+					]
+				},
+				"description": "partially update the attribute of entity"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Entity (HumiditySensor)",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"humidity\": {\r\n        \"type\":\"Property\", \r\n        \"value\": 38.8, \r\n        \"unitCode\": \"P1\"\r\n    }\r\n}\r\n"
+				},
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:HumiditySensor:1/attrs",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						"urn:ngsi-ld:HumiditySensor:1",
+						"attrs"
+					]
+				},
+				"description": "partially update the attribute of entity"
+			},
+			"response": []
+		},
+		{
+			"name": "Partial Attribute Update (name Property IotDevice)",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"Property\", \r\n    \"value\": \"IoTDeviceSensors\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:IotDevice:1/attrs/name",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						"urn:ngsi-ld:IotDevice:1",
+						"attrs",
+						"name"
+					]
+				},
+				"description": "partially update the attribute of entity"
+			},
+			"response": []
+		},
+		{
+			"name": "Append attribute (description Property IotDevice)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"description\": {\r\n        \"type\": \"Property\", \r\n        \"value\": \"IoT device with sensors.\"\r\n    }\r\n}\r\n"
+				},
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/entities/urn:ngsi-ld:IotDevice:1/attrs",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						"urn:ngsi-ld:IotDevice:1",
+						"attrs"
+					]
+				},
+				"description": "partially update the attribute of entity"
+			},
+			"response": []
+		},
+		{
+			"name": "Create on-change subscription",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"subscription1\", pm.response.headers.get(\"Location\"));",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					},
+					{
+						"key": "options",
+						"value": "sysAttrs",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"urn:ngsi-ld:Subscription:OnChange:IotDevice\",\r\n\t\"type\": \"Subscription\",\r\n\t\"entities\": [{\r\n\t\t\"type\": \"IotDevice\"\r\n\t}],\r\n    \"description\": \"On-change subscription to entities for changes within the Properties name and hasSensor.\",\r\n    \"watchedAttributes\": [\"name\", \"hasSensor\"],\r\n\t\"notification\": {\r\n\t\t\"endpoint\": {\r\n\t\t\t\"uri\": \"http://notifier-consumer:8082/notify\",\r\n\t\t\t\"accept\": \"application/json\"\r\n\t\t},\r\n        \"format\": \"normalized\",\r\n        \"attributes\": [\"name\", \"hasSensor\"]\r\n\t}\r\n}"
+				},
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/subscriptions/",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"subscriptions",
+						""
+					]
+				},
+				"description": "create subscription with context in payload"
+			},
+			"response": []
+		},
+		{
+			"name": "Create on-change subscription issues with sysAttrs and showChanges notification parameters",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"subscription1\", pm.response.headers.get(\"Location\"));",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					},
+					{
+						"key": "options",
+						"value": "sysAttrs",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"urn:ngsi-ld:Subscription:OnChange:IotDevice\",\r\n\t\"type\": \"Subscription\",\r\n\t\"entities\": [{\r\n\t\t\"type\": \"IotDevice\"\r\n\t}],\r\n    \"description\": \"On-change subscription to entities for changes within the Properties name and hasSensor.\",\r\n    \"watchedAttributes\": [\"name\", \"hasSensor\"],\r\n\t\"notification\": {\r\n\t\t\"endpoint\": {\r\n\t\t\t\"uri\": \"http://notifier-consumer:8082/notify\",\r\n\t\t\t\"accept\": \"application/json\"\r\n\t\t},\r\n        \"format\": \"normalized\",\r\n        \"attributes\": [\"name\", \"hasSensor\"],\r\n        \"sysAttrs\": true,\r\n        \"showChanges\": true\r\n\t}\r\n}"
+				},
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/subscriptions/",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"subscriptions",
+						""
+					]
+				},
+				"description": "create subscription with context in payload"
+			},
+			"response": []
+		},
+		{
+			"name": "Create periodic subscription issue with timeInterval parameter",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"subscription1\", pm.response.headers.get(\"Location\"));",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					},
+					{
+						"key": "options",
+						"value": "sysAttrs",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"id\": \"urn:ngsi-ld:Subscription:Periodic:IotDevice\",\r\n    \"type\": \"Subscription\",\r\n\t\"entities\": [{\r\n\t\t\"type\": \"IotDevice\"\r\n\t}],\r\n    \"description\": \"Periodic Subscription Test.\",\r\n    \"timeInterval\": 10,\r\n\t\"notification\": {\r\n\t\t\"endpoint\": {\r\n\t\t\t\"uri\": \"http://notifier-consumer:8082/notify\",\r\n\t\t\t\"accept\": \"application/json\"\r\n\t\t}\r\n\t}\r\n}"
+				},
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/subscriptions/",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"subscriptions",
+						""
+					]
+				},
+				"description": "create subscription with context in payload"
+			},
+			"response": []
+		},
+		{
+			"name": "Query all subscriptions",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/subscriptions/",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"subscriptions",
+						""
+					]
+				},
+				"description": "for retreiving specific subscription"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete subscription",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/subscriptions/urn:ngsi-ld:Subscription:OnChange:IotDevice",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"subscriptions",
+						"urn:ngsi-ld:Subscription:OnChange:IotDevice"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create csource",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"type\": \"ContextSourceRegistration\",\n    \"name\": \"cSource1\",\n    \"description\": \"cSource Registration\",\n    \"information\": [\n        {\n            \"entities\": [\n                {\n                \"type\": \"IotDevice\"\n                }\n            ]\n        }\n    ],\n    \"endpoint\": \"http://orion-context-source:1026\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/csourceRegistrations/",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"csourceRegistrations",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query csource by type",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Link",
+						"value": "<{{context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{broker}}/ngsi-ld/v1/csourceRegistrations?type=IotDevice",
+					"protocol": "http",
+					"host": [
+						"{{broker}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"csourceRegistrations"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "IotDevice"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "broker",
+			"value": "localhost:1026",
+			"type": "string"
+		},
+		{
+			"key": "context.jsonld",
+			"value": "http://context-catalog:8080/context.jsonld",
+			"type": "string"
+		}
+	]
+}
