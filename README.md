@@ -45,7 +45,9 @@ The high-level schema representation for its NGSI-LD information model is depict
 
 ![IoT Sensors NGSI-LD Information Model Schema](resources/images/iot-sensors-information-model-schema.png)
 
-The `*` character represents mandatory NGSI-LD Properties of the NGSI-LD Entities. The `hasSensor` NGSI-LD Relationship of NGSI-LD Entity of type `IotDevice` is not mandatory and has cardinality `1:N` since it represents a multi-relationship to NGSI-LD Entities of type `TemperatureSensor` and/or `HumiditySentor`. All these NGSI-LD information model conventions are included in the OpenAPI schema as mentioned above.
+> **Note 3:**
+>
+> The `*` character represents mandatory NGSI-LD Properties of the NGSI-LD Entities. The `hasSensor` NGSI-LD Relationship of NGSI-LD Entity of type `IotDevice` is not mandatory and has cardinality `1:N` since it represents a multi-relationship to NGSI-LD Entities of type `TemperatureSensor` and/or `HumiditySentor`. All these NGSI-LD information model conventions are included in the OpenAPI schema as mentioned above.
 
 To ease management of Python dependencies we rely on [Poetry](https://python-poetry.org/) tool. Poetry takes care of solving dependency conflicts and also configures virtual environments to develop our Python applications. Recommendations for preparing the virtual environment with `poetry` and installing the Python library `ngsi_ld_models` are described below:
 1. Download and install `poetry` by following the [official documentacion](https://python-poetry.org/docs/master/#installing-with-the-official-installer).
@@ -117,12 +119,16 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
 
     ![IoT Sensors NGSI-LD Information Model Instance](resources/images/iot-sensors-information-model-instance.png)
 
+    > **Note:**
+    >
+    > The NGSI-LD _unit codes_ for representing values of temperature in degrees Celsius and percent of humidity are extracted from UNECE/CEFACT Common Codes for specifying the unit of measurement [1](http://www.unece.org/fileadmin/DAM/cefact/recommendations/rec20/rec20_Rev9e_2014.xls), [2](https://github.com/easy-global-market/ngsild-api-data-models/blob/master/UnitCodes.md#uncefact-common-codes) as specified by [ETSI GS CIM 009 V1.6.1](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.06.01_60/gs_CIM009v010601p.pdf).
+
 7. To delete the previously created NGSI-LD Entities of type `IotDevice`, `TemperatureSensor`, and `HumiditySensor` by using its `id` field (i.e., `delete_entity` operation), run the [iot-sensors-tester/delete-iot-sensors-entities.py](iot-sensors-tester/delete-iot-sensors-entities.py) Python script as follow:
     ```bash
     (iot-sensors-tester-py3.9) $ python delete-iot-sensors-entities.py
     ```
 
-> **Additional Notes:**
+> **_Under Testing and Develoment:_**
 >
 > There are additional Python scripts for validating other OpenAPI NGSI-LD operations such as the [`update_attrs`](https://github.com/giros-dit/python-ngsi-ld-client/blob/1.6.1/docs/ContextInformationProvisionApi.md#update_attrs), [`append_attrs`](https://github.com/giros-dit/python-ngsi-ld-client/blob/1.6.1/docs/ContextInformationProvisionApi.md#append_attrs), and [`create_subscription`](https://github.com/giros-dit/python-ngsi-ld-client/blob/1.6.1/docs/ContextInformationSubscriptionApi.md#create_subscription) but they are still under testing and development. The following instructions can be taken for now:
 
