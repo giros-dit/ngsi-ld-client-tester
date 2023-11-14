@@ -45,7 +45,7 @@ The high-level schema representation for its NGSI-LD information model is depict
 
 ![IoT Sensors NGSI-LD Information Model Schema](resources/images/iot-sensors-information-model-schema.png)
 
-> **Note 3:**
+> **Note:**
 >
 > The `*` character represents mandatory NGSI-LD Properties of the NGSI-LD Entities. The `hasSensor` NGSI-LD Relationship of NGSI-LD Entity of type `IotDevice` is not mandatory and has cardinality `1:N` since it represents a multi-relationship to NGSI-LD Entities of type `TemperatureSensor` and/or `HumiditySentor`. All these NGSI-LD information model conventions are included in the OpenAPI schema as mentioned above.
 
