@@ -121,7 +121,7 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
 
     > **Note:**
     >
-    > The NGSI-LD _unit codes_ for representing values of temperature in degrees Celsius and percent of humidity are extracted from UNECE/CEFACT Common Codes for specifying the unit of measurement [1](http://www.unece.org/fileadmin/DAM/cefact/recommendations/rec20/rec20_Rev9e_2014.xls), [2](https://github.com/easy-global-market/ngsild-api-data-models/blob/master/UnitCodes.md#uncefact-common-codes) as specified by [ETSI GS CIM 009 V1.6.1](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.06.01_60/gs_CIM009v010601p.pdf).
+    > The NGSI-LD _unit codes_ for representing values of temperature in degrees Celsius and percent of humidity are extracted from UNECE/CEFACT Common Codes for specifying the unit of measurement [[1](http://www.unece.org/fileadmin/DAM/cefact/recommendations/rec20/rec20_Rev9e_2014.xls)], [[2](https://github.com/easy-global-market/ngsild-api-data-models/blob/master/UnitCodes.md#uncefact-common-codes)] as specified by [ETSI GS CIM 009 V1.6.1](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.06.01_60/gs_CIM009v010601p.pdf).
 
 7. To delete the previously created NGSI-LD Entities of type `IotDevice`, `TemperatureSensor`, and `HumiditySensor` by using its `id` field (i.e., `delete_entity` operation), run the [iot-sensors-tester/delete-iot-sensors-entities.py](iot-sensors-tester/delete-iot-sensors-entities.py) Python script as follow:
     ```bash
