@@ -149,4 +149,4 @@ target/
 poetry.lock
 
 # Additional 
-.tests/
+testing/
