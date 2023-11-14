@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 # NGSI-LD Context Broker
 BROKER_URI = os.getenv("BROKER_URI", "http://orion:1026/ngsi-ld/v1")
-#BROKER_URI = os.getenv("BROKER_URI", "http://scorpio:9090/ngsi-ld/v1")
+
 # Context Catalog
 CONTEXT_CATALOG_URI = os.getenv("CONTEXT_CATALOG_URI",
                                 "http://context-catalog:8080/context.jsonld")
@@ -70,7 +70,7 @@ async def startup_event():
             id="urn:ngsi-ld:Subscription:Periodic:{0}".format(entity),
             type="Subscription",
             entities=[{ "type": entity }],
-            description="Periodic subscription to entities.",
+            description="Periodic subscription Test.",
             timeInterval= 10,
             notification=notification_params
         )
@@ -89,7 +89,7 @@ async def startup_event():
             id="urn:ngsi-ld:Subscription:OnChange:{0}".format(entity),
             type="Subscription",
             entities=[{ "type": entity }],
-            description="On-change subscription to entities for changes within the property name.",
+            description="On-change subscription to entities for changes within the Properties name and hasSensor.",
             watchedAttributes=["name", "hasSensor"],
             notification=notification_params
         )

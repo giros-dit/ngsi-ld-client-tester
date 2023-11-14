@@ -23,6 +23,10 @@ RUN python -m venv /venv
 
 RUN apt-get update && apt-get install git -y
 
+# Copy ngsi_ld_models dependency
+RUN mkdir -p /ngsi-ld-models
+COPY ngsi-ld-models /ngsi-ld-models
+
 # Copy app artifacts
 COPY docker/${APP_NAME}/pyproject.toml docker/${APP_NAME}/poetry.lock ./
 RUN poetry export -f requirements.txt --without-hashes | /venv/bin/pip install -r /dev/stdin

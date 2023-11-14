@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "iot-sensors-tester"
-version = "0.1.0"
+version = "1.0.0"
 description = "Tester for NGSI-LD API operations"
 authors = ["GIROS-DIT UPM <gi.giros@upm.es>"]
 

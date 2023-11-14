@@ -48,7 +48,7 @@ ngsi_ld.set_default_header(
 
 iot_device = IotDevice(
     type="IotDevice",
-    name={"type":"Property", "value": "IoT Device"},
+    name={"type":"Property", "value": "IoT-Device"},
     hasSensor=HasSensor.from_dict([{"type": "Relationship", "object": "urn:ngsi-ld:TemperatureSensor:1"},{"type": "Relationship", "object": "urn:ngsi-ld:HumiditySensor:1"}]),
 )
 
