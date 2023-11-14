@@ -45,6 +45,8 @@ The high-level schema representation for its NGSI-LD information model is depict
 
 ![IoT Sensors NGSI-LD Information Model Schema](resources/images/iot-sensors-information-model-schema.png)
 
+The `*` character represents mandatory NGSI-LD Properties of the NGSI-LD Entities. The `hasSensor` NGSI-LD Relationship of NGSI-LD Entity of type `IotDevice` is not mandatory and has cardinality `1:N` since it represents a multi-relationship to NGSI-LD Entities of type `TemperatureSensor` and/or `HumiditySentor`. All these NGSI-LD information model conventions are included in the OpenAPI schema as mentioned above.
+
 To ease management of Python dependencies we rely on [Poetry](https://python-poetry.org/) tool. Poetry takes care of solving dependency conflicts and also configures virtual environments to develop our Python applications. Recommendations for preparing the virtual environment with `poetry` and installing the Python library `ngsi_ld_models` are described below:
 1. Download and install `poetry` by following the [official documentacion](https://python-poetry.org/docs/master/#installing-with-the-official-installer).
 2. Make sure you have the right Python version for this project (Python>=3.9 in this case):
@@ -89,23 +91,23 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
         (iot-sensors-tester-py3.9) $ poetry install
         ```
         The virtual environment is now activated and the Python dependencies (i.e., `ngsi_ld_client` and `ngsi_ld_models` Python modules) installed and ready to be used.
-2. To create a sample NGSI-LD Entity (e.g, NGSI-LD Entity of type `IotDevice`), run the [iot-sensors-tester/create-iot-device-entity.py](iot-sensors-tester/create-iot-device-entity.py) Python script as follow:
+2. To create a sample NGSI-LD Entity (e.g, NGSI-LD Entity of type `IotDevice`) by using of the `create_entity` operation, run the [iot-sensors-tester/create-iot-device-entity.py](iot-sensors-tester/create-iot-device-entity.py) Python script as follow:
     ```bash
     (iot-sensors-tester-py3.9) $ python create-iot-device-entity.py
     ```
-3. To retrieve the previously created NGSI-LD Entity by using its `id` field, run the [iot-sensors-tester/retrieve-iot-device-entity.py](iot-sensors-tester/retrieve-iot-device-entity.py) Python script as follow:
+3. To retrieve the previously created NGSI-LD Entity by using its `id` field (i.e., `retrieve_entity` operation), run the [iot-sensors-tester/retrieve-iot-device-entity.py](iot-sensors-tester/retrieve-iot-device-entity.py) Python script as follow:
     ```bash
     (iot-sensors-tester-py3.9) $ python retrieve-iot-device-entity.py
     ```
-4. To query all the NGSI-LD Entities of a particular type (e.g, NGSI-LD Entity of type `IotDevice`), run the [iot-sensors-tester/query-iot-device-entities.py](iot-sensors-tester/query-iot-device-entities.py) Python script as follow:
+4. To query all the NGSI-LD Entities of a particular type (e.g, NGSI-LD Entity of type `IotDevice`) by using of the `retrieve_entity` operation, run the [iot-sensors-tester/query-iot-device-entities.py](iot-sensors-tester/query-iot-device-entities.py) Python script as follow:
     ```bash
     (iot-sensors-tester-py3.9) $ python query-iot-device-entities.py
     ```
-5. To update the previously created NGSI-LD Entity of type `IotDevice` by using its `id` field, run the [iot-sensors-tester/update-iot-device-entity.py](iot-sensors-tester/update-iot-device-entity.py) Python script as follow:
+5. To update the previously created NGSI-LD Entity of type `IotDevice` by using its `id` field (i.e., `update_entity` operation), run the [iot-sensors-tester/update-iot-device-entity.py](iot-sensors-tester/update-iot-device-entity.py) Python script as follow:
     ```bash
     (iot-sensors-tester-py3.9) $ python update-iot-device-entity.py
     ```
-6. To create different NGSI-LD Entities (e.g, NGSI-LD Entities of type `IotDevice`, `TemperatureSensor`, and `HumiditySensor`) by using its `id` field, run the [iot-sensors-tester/upsert-iot-sensors-entities.py](iot-sensors-tester/upsert-iot-sensors-entities.py) Python script as follow:
+6. To create different NGSI-LD Entities (e.g, NGSI-LD Entities of type `IotDevice`, `TemperatureSensor`, and `HumiditySensor`) by using its `id` field (i.e., `upsert_batch` operation), run the [iot-sensors-tester/upsert-iot-sensors-entities.py](iot-sensors-tester/upsert-iot-sensors-entities.py) Python script as follow:
     ```bash
     (iot-sensors-tester-py3.9) $ python upsert-iot-sensors-entities.py
     ```
@@ -115,14 +117,29 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
 
     ![IoT Sensors NGSI-LD Information Model Instance](resources/images/iot-sensors-information-model-instance.png)
 
-7. To delete the previously created NGSI-LD Entities of type `IotDevice`, `TemperatureSensor`, and `HumiditySensor` by using its `id` field, run the [iot-sensors-tester/delete-iot-sensors-entities.py](iot-sensors-tester/delete-iot-sensors-entities.py) Python script as follow:
+7. To delete the previously created NGSI-LD Entities of type `IotDevice`, `TemperatureSensor`, and `HumiditySensor` by using its `id` field (i.e., `delete_entity` operation), run the [iot-sensors-tester/delete-iot-sensors-entities.py](iot-sensors-tester/delete-iot-sensors-entities.py) Python script as follow:
     ```bash
     (iot-sensors-tester-py3.9) $ python delete-iot-sensors-entities.py
     ```
 
-> **Note: Comming Soon!**
+> **Additional Note:**
 >
-> There are additional Python scripts for validating other OpenAPI NGSI-LD operations such as the [`update_attrs`](https://github.com/giros-dit/python-ngsi-ld-client/blob/1.6.1/docs/ContextInformationProvisionApi.md#update_attrs), [`append_attrs`](https://github.com/giros-dit/python-ngsi-ld-client/blob/1.6.1/docs/ContextInformationProvisionApi.md#append_attrs), and [`create_subscription`](https://github.com/giros-dit/python-ngsi-ld-client/blob/1.6.1/docs/ContextInformationSubscriptionApi.md#create_subscription) but they are still under testing and development.
+> There are additional Python scripts for validating other OpenAPI NGSI-LD operations such as the [`update_attrs`](https://github.com/giros-dit/python-ngsi-ld-client/blob/1.6.1/docs/ContextInformationProvisionApi.md#update_attrs), [`append_attrs`](https://github.com/giros-dit/python-ngsi-ld-client/blob/1.6.1/docs/ContextInformationProvisionApi.md#append_attrs), and [`create_subscription`](https://github.com/giros-dit/python-ngsi-ld-client/blob/1.6.1/docs/ContextInformationSubscriptionApi.md#create_subscription) but they are still under testing and development. The following instructions can be taken for now:
+
+8. To update a particular Attribute (i.e., NGSI-LD Property or NGSI-LD Relationship) of a NGSI-LD Entity identified by its Attribute id (i.e., `update_attrs` operation), there is a sample Python script [iot-sensors-tester/update-iot-device-property-name.py](iot-sensors-tester/update-iot-device-property-name.py) that enables updating the NGSI-LD Property `name` of a particular NGSI-LD Entity of type `IotDevice` identified by its own id. Run the Python script as follow:
+    ```bash
+    (iot-sensors-tester-py3.9) $ python update-iot-device-property-name.py
+    ```
+
+9. To append Attributes (i.e., NGSI-LD Properties and NGSI-LD Relationships) to a particular NGSI-LD Entity (i.e., `append_attrs` operation), there is a sample Python script [iot-sensors-tester/append-attrs-iot-device-sensors.py](iot-sensors-tester/append-attrs-iot-device-sensors.py) that enables append the NGSI-LD Property `description` of a particular NGSI-LD Entity of type `IotDevice` identified by its own id. Run the Python script as follow:
+    ```bash
+    (iot-sensors-tester-py3.9) $ python append-iot-device-property-desc.py
+    ```
+
+10. For create subscriptions (i.e., `create_subscription` operation), there is a simple tester microservice called [`notifier-consumer`](docker/notifier-consumer/) that creates a subscription to NGSI-LD Entities of type `IotDevice` and particularly to the Attributes `name` and `hasSensor` and hope to receive notifications at a particular HTTP endpoint `http://notifier-consumer:8082/notify`. The details of the main code for the `notifier-consumer` microservice is [here](docker/notifier-consumer/notifier_consumer/main.py). Once and NGSI-LD Entity of type `IotDevice` will be created or modified, the `notifier-consumer` will receive a notification. To check the notifications received, display the associated docker container logs with the `notifier-consumer` microservice as follows: 
+    ```bash
+    $ docker logs -f notifier-consumer
+    ```
 
 In addition, for validating example JSON payloads (e.g., [`IotDevice`](iot-sensors-tester/examples/iot-device//example-normalized.json) example) against the autogenerated Python class bindings (e.g., `IotDevice` Pydantic class available [here](ngsi-ld-models/ngsi_ld_models/models/iot_device.py)), run the Python unit test from the `iot-sensors-tester` folder as follows:
 ```bash

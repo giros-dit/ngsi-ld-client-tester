@@ -56,16 +56,17 @@ api_instance = ngsi_ld_client.ContextInformationConsumptionApi(ngsi_ld)
 
 #sysAttrs = QueryEntityOptionsParameterInner(OptionsSysAttrs.SYSATTRS)
 
-sysAttrs = OptionsSysAttrs('sysAttrs')
+sysAttrs = OptionsSysAttrs()
 
-entity_params = QueryEntityOptionsParameterInner.from_dict(sysAttrs)
+#entity_params = QueryEntityOptionsParameterInner.from_dict(sysAttrs)
+entity_params = QueryEntityOptionsParameterInner(sysAttrs)
 
 logger.info(type(sysAttrs))
 logger.info(sysAttrs)
-logger.info(entity_params)
+logger.info(entity_params.to_dict())
 logger.info(type(entity_params))
 options_param.append(entity_params)
-
+logger.info(options_param)
 try:
     # Query NGSI-LD entities of type Sensor: GET /entities
     api_response = api_instance.query_entity(type='IotDevice', options=options_param)

@@ -7,15 +7,11 @@ import ngsi_ld_client
 
 from ngsi_ld_models.models.iot_device import IotDevice
 from ngsi_ld_models.models.has_sensor import HasSensor
-from ngsi_ld_models.models.name import Name
 from ngsi_ld_client.models.entity import Entity
-from ngsi_ld_client.models.model_property import ModelProperty
-from ngsi_ld_client.models.property_value import PropertyValue
 
 from ngsi_ld_client.api_client import ApiClient as NGSILDClient
 from ngsi_ld_client.configuration import Configuration as NGSILDConfiguration
 from ngsi_ld_client.exceptions import ApiException
-from ngsi_ld_client.models.replace_attrs_request import ReplaceAttrsRequest
 
 #assuming the log config file name is logging.yaml
 with open('logging.yaml', 'r') as stream:
@@ -52,7 +48,7 @@ ngsi_ld.set_default_header(
 iot_device = IotDevice(
     type="IotDevice",
     name={"type":"Property", "value": "IoTDevice"},
-    hasSensor=HasSensor.from_dict([{"type": "Relationship", "object": "urn:ngsi-ld:TemperatureSensor:1"},{"type": "Relationship", "object": "urn:ngsi-ld:HumiditySensor:1"}]) 
+    description={"type": "Property", "value": "IoT device with sensors."} 
 )
 
 api_instance = ngsi_ld_client.ContextInformationProvisionApi(ngsi_ld)
