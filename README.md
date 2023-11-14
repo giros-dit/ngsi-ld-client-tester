@@ -128,7 +128,7 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
     (iot-sensors-tester-py3.9) $ python delete-iot-sensors-entities.py
     ```
 
-> **_Under Testing and Develoment:_**
+> **_Under Testing and Development:_**
 >
 > There are additional Python scripts for validating other OpenAPI NGSI-LD operations such as the [`update_attrs`](https://github.com/giros-dit/python-ngsi-ld-client/blob/1.6.1/docs/ContextInformationProvisionApi.md#update_attrs), [`append_attrs`](https://github.com/giros-dit/python-ngsi-ld-client/blob/1.6.1/docs/ContextInformationProvisionApi.md#append_attrs), and [`create_subscription`](https://github.com/giros-dit/python-ngsi-ld-client/blob/1.6.1/docs/ContextInformationSubscriptionApi.md#create_subscription) but they are still under testing and development. The following instructions can be taken for now:
 
