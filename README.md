@@ -122,7 +122,7 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
     (iot-sensors-tester-py3.9) $ python delete-iot-sensors-entities.py
     ```
 
-> **Additional Note:**
+> **Additional Notes:**
 >
 > There are additional Python scripts for validating other OpenAPI NGSI-LD operations such as the [`update_attrs`](https://github.com/giros-dit/python-ngsi-ld-client/blob/1.6.1/docs/ContextInformationProvisionApi.md#update_attrs), [`append_attrs`](https://github.com/giros-dit/python-ngsi-ld-client/blob/1.6.1/docs/ContextInformationProvisionApi.md#append_attrs), and [`create_subscription`](https://github.com/giros-dit/python-ngsi-ld-client/blob/1.6.1/docs/ContextInformationSubscriptionApi.md#create_subscription) but they are still under testing and development. The following instructions can be taken for now:
 
@@ -136,7 +136,7 @@ To validate the [`create_entity`](https://github.com/giros-dit/python-ngsi-ld-cl
     (iot-sensors-tester-py3.9) $ python append-iot-device-property-desc.py
     ```
 
-10. For create subscriptions (i.e., `create_subscription` operation), there is a simple tester microservice called [`notifier-consumer`](docker/notifier-consumer/) that creates a subscription to NGSI-LD Entities of type `IotDevice` and particularly to the Attributes `name` and `hasSensor` and hope to receive notifications at a particular HTTP endpoint `http://notifier-consumer:8082/notify`. The details of the main code for the `notifier-consumer` microservice is [here](docker/notifier-consumer/notifier_consumer/main.py). Once and NGSI-LD Entity of type `IotDevice` will be created or modified, the `notifier-consumer` will receive a notification. To check the notifications received, display the associated docker container logs with the `notifier-consumer` microservice as follows: 
+10. For create subscriptions (i.e., `create_subscription` operation), there is a simple tester microservice called [`notifier-consumer`](docker/notifier-consumer/) that creates a subscription based on changes to NGSI-LD Entities of type `IotDevice` and particularly to the Attributes `name` and `hasSensor` and hope to receive notifications at a particular HTTP endpoint `http://notifier-consumer:8082/notify`. The details of the main code for the `notifier-consumer` microservice is [here](docker/notifier-consumer/notifier_consumer/main.py). Once and NGSI-LD Entity of type `IotDevice` will be created or modified, the `notifier-consumer` will receive a notification. To check the notifications received, display the associated docker container logs with the `notifier-consumer` microservice as follows: 
     ```bash
     $ docker logs -f notifier-consumer
     ```
