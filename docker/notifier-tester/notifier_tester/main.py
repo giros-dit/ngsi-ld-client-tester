@@ -31,7 +31,7 @@ CONTEXT_CATALOG_URI = os.getenv("CONTEXT_CATALOG_URI",
                                 "http://context-catalog:8080/context.jsonld")
 
 # Notifier
-NOTIFIER_URI = os.getenv("NOTIFIER_URI", "http://notifier-consumer:8082/notify")
+NOTIFIER_URI = os.getenv("NOTIFIER_URI", "http://notifier-tester:8082/notify")
 
 # Init NGSI-LD Client
 configuration = NGSILDConfiguration(host=BROKER_URI)
