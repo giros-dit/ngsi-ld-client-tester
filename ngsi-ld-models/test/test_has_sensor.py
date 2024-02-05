@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_models.models.has_sensor import HasSensor  # noqa: E501
+from ngsi_ld_models.models.has_sensor import HasSensor
 
 class TestHasSensor(unittest.TestCase):
     """HasSensor unit test stubs"""
@@ -33,7 +32,7 @@ class TestHasSensor(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `HasSensor`
         """
-        model = HasSensor()  # noqa: E501
+        model = HasSensor()
         if include_optional:
             return HasSensor(
                 type = 'Relationship',

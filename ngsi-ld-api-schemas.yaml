@@ -5156,9 +5156,9 @@ components:
         NGSI-LD Relationship Type to identify the sensors of the IoT device.
       oneOf:
         - $ref: '#/components/schemas/Relationship'
-        - type: array
-          items:
-            $ref: '#/components/schemas/Relationship'
+#        - type: array
+#          items:
+#            $ref: '#/components/schemas/Relationship'
       additionalProperties: false
     TemperatureSensor:
       description: | 

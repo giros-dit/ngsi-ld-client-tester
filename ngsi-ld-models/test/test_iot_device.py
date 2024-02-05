@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_models.models.iot_device import IotDevice  # noqa: E501
+from ngsi_ld_models.models.iot_device import IotDevice
 
 class TestIotDevice(unittest.TestCase):
     """IotDevice unit test stubs"""
@@ -33,7 +32,7 @@ class TestIotDevice(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `IotDevice`
         """
-        model = IotDevice()  # noqa: E501
+        model = IotDevice()
         if include_optional:
             return IotDevice(
                 id = '',

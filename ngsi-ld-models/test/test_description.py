@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_models.models.description import Description  # noqa: E501
+from ngsi_ld_models.models.description import Description
 
 class TestDescription(unittest.TestCase):
     """Description unit test stubs"""
@@ -33,7 +32,7 @@ class TestDescription(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `Description`
         """
-        model = Description()  # noqa: E501
+        model = Description()
         if include_optional:
             return Description(
                 type = 'Property',

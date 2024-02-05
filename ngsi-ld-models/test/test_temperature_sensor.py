@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_models.models.temperature_sensor import TemperatureSensor  # noqa: E501
+from ngsi_ld_models.models.temperature_sensor import TemperatureSensor
 
 class TestTemperatureSensor(unittest.TestCase):
     """TemperatureSensor unit test stubs"""
@@ -33,7 +32,7 @@ class TestTemperatureSensor(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `TemperatureSensor`
         """
-        model = TemperatureSensor()  # noqa: E501
+        model = TemperatureSensor()
         if include_optional:
             return TemperatureSensor(
                 id = '',

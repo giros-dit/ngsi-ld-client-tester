@@ -3,6 +3,7 @@
 NGSI-LD Enitity Type that represents a humidity sensor. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Entity id.  | [optional] 

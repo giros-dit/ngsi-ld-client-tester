@@ -3,6 +3,7 @@
 NGSI-LD Entity Type that represents a temperature sensor. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Entity id.  | [optional] 

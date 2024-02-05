@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_models.models.name import Name  # noqa: E501
+from ngsi_ld_models.models.name import Name
 
 class TestName(unittest.TestCase):
     """Name unit test stubs"""
@@ -33,7 +32,7 @@ class TestName(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `Name`
         """
-        model = Name()  # noqa: E501
+        model = Name()
         if include_optional:
             return Name(
                 type = 'Property',

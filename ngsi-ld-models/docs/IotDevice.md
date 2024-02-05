@@ -3,6 +3,7 @@
 NGSI-LD Entity Type that represents an IoT device. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Entity id.  | [optional] 

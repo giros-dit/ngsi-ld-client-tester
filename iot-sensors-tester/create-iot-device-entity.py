@@ -2,6 +2,7 @@ import logging
 import logging.config
 import yaml
 import os
+import json
 
 import ngsi_ld_client
 
@@ -49,9 +50,9 @@ iot_device = IotDevice(
     id="urn:ngsi-ld:IotDevice:1",
     type="IotDevice",
     name={"type":"Property", "value": "IoTDevice"},
-    hasSensor=HasSensor.from_dict({"type": "Relationship", "object": "urn:ngsi-ld:TemperatureSensor:1"})
+    hasSensor=HasSensor.from_dict({"type": "Relationship", "object": ["urn:ngsi-ld:TemperatureSensor:1","urn:ngsi-ld:TemperatureSensor:2"]})
+    #hasSensor=HasSensor.from_dict([{"type": "Relationship", "object": "urn:ngsi-ld:TemperatureSensor:1"},{"type": "Relationship", "object": "urn:ngsi-ld:HumiditySensor:2"}])
 )
-
 api_instance = ngsi_ld_client.ContextInformationProvisionApi(ngsi_ld)
 
 entity_input = iot_device.to_dict()

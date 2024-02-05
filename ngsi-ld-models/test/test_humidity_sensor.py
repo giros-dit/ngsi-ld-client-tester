@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_models.models.humidity_sensor import HumiditySensor  # noqa: E501
+from ngsi_ld_models.models.humidity_sensor import HumiditySensor
 
 class TestHumiditySensor(unittest.TestCase):
     """HumiditySensor unit test stubs"""
@@ -33,7 +32,7 @@ class TestHumiditySensor(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `HumiditySensor`
         """
-        model = HumiditySensor()  # noqa: E501
+        model = HumiditySensor()
         if include_optional:
             return HumiditySensor(
                 id = '',

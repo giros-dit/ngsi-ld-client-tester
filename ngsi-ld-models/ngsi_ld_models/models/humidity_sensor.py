@@ -18,22 +18,18 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
+from pydantic import BaseModel, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictStr, field_validator
-from pydantic import Field
 from ngsi_ld_models.models.entity_scope import EntityScope
 from ngsi_ld_models.models.geo_property import GeoProperty
 from ngsi_ld_models.models.humidity import Humidity
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class HumiditySensor(BaseModel):
     """
-    NGSI-LD Enitity Type that represents a humidity sensor.   # noqa: E501
-    """
+    NGSI-LD Enitity Type that represents a humidity sensor. 
+    """ # noqa: E501
     id: Optional[StrictStr] = Field(default=None, description="Entity id. ")
     type: StrictStr = Field(description="NGSI-LD Entity identifier. It has to be HumiditySensor.")
     scope: Optional[EntityScope] = None
@@ -56,7 +52,8 @@ class HumiditySensor(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -70,7 +67,7 @@ class HumiditySensor(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of HumiditySensor from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -88,14 +85,16 @@ class HumiditySensor(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "created_at",
+            "modified_at",
+            "deleted_at",
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "created_at",
-                "modified_at",
-                "deleted_at",
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of scope
@@ -121,7 +120,7 @@ class HumiditySensor(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of HumiditySensor from a dict"""
         if obj is None:
             return None
@@ -132,14 +131,14 @@ class HumiditySensor(BaseModel):
         _obj = cls.model_validate({
             "id": obj.get("id"),
             "type": obj.get("type") if obj.get("type") is not None else 'HumiditySensor',
-            "scope": EntityScope.from_dict(obj.get("scope")) if obj.get("scope") is not None else None,
-            "location": GeoProperty.from_dict(obj.get("location")) if obj.get("location") is not None else None,
-            "observationSpace": GeoProperty.from_dict(obj.get("observationSpace")) if obj.get("observationSpace") is not None else None,
-            "operationSpace": GeoProperty.from_dict(obj.get("operationSpace")) if obj.get("operationSpace") is not None else None,
+            "scope": EntityScope.from_dict(obj["scope"]) if obj.get("scope") is not None else None,
+            "location": GeoProperty.from_dict(obj["location"]) if obj.get("location") is not None else None,
+            "observationSpace": GeoProperty.from_dict(obj["observationSpace"]) if obj.get("observationSpace") is not None else None,
+            "operationSpace": GeoProperty.from_dict(obj["operationSpace"]) if obj.get("operationSpace") is not None else None,
             "createdAt": obj.get("createdAt"),
             "modifiedAt": obj.get("modifiedAt"),
             "deletedAt": obj.get("deletedAt"),
-            "humidity": Humidity.from_dict(obj.get("humidity")) if obj.get("humidity") is not None else None
+            "humidity": Humidity.from_dict(obj["humidity"]) if obj.get("humidity") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

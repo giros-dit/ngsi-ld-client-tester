@@ -3,6 +3,7 @@
 NGSI-LD Relationship Type to identify the sensors of the IoT device. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** | Node type.  | [optional] [default to 'Relationship']

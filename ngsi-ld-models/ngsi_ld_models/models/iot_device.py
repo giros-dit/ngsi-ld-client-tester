@@ -18,24 +18,20 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
+from pydantic import BaseModel, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictStr, field_validator
-from pydantic import Field
 from ngsi_ld_models.models.description import Description
 from ngsi_ld_models.models.entity_scope import EntityScope
 from ngsi_ld_models.models.geo_property import GeoProperty
 from ngsi_ld_models.models.has_sensor import HasSensor
 from ngsi_ld_models.models.name import Name
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class IotDevice(BaseModel):
     """
-    NGSI-LD Entity Type that represents an IoT device.   # noqa: E501
-    """
+    NGSI-LD Entity Type that represents an IoT device. 
+    """ # noqa: E501
     id: Optional[StrictStr] = Field(default=None, description="Entity id. ")
     type: StrictStr = Field(description="NGSI-LD Entity identifier. It has to be IotDevice.")
     scope: Optional[EntityScope] = None
@@ -60,7 +56,8 @@ class IotDevice(BaseModel):
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -74,7 +71,7 @@ class IotDevice(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of IotDevice from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -92,14 +89,16 @@ class IotDevice(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * Fields in `self.additional_properties` are added to the output dict.
         """
+        excluded_fields: Set[str] = set([
+            "created_at",
+            "modified_at",
+            "deleted_at",
+            "additional_properties",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "created_at",
-                "modified_at",
-                "deleted_at",
-                "additional_properties",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of scope
@@ -131,7 +130,7 @@ class IotDevice(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of IotDevice from a dict"""
         if obj is None:
             return None
@@ -142,16 +141,16 @@ class IotDevice(BaseModel):
         _obj = cls.model_validate({
             "id": obj.get("id"),
             "type": obj.get("type") if obj.get("type") is not None else 'IotDevice',
-            "scope": EntityScope.from_dict(obj.get("scope")) if obj.get("scope") is not None else None,
-            "location": GeoProperty.from_dict(obj.get("location")) if obj.get("location") is not None else None,
-            "observationSpace": GeoProperty.from_dict(obj.get("observationSpace")) if obj.get("observationSpace") is not None else None,
-            "operationSpace": GeoProperty.from_dict(obj.get("operationSpace")) if obj.get("operationSpace") is not None else None,
+            "scope": EntityScope.from_dict(obj["scope"]) if obj.get("scope") is not None else None,
+            "location": GeoProperty.from_dict(obj["location"]) if obj.get("location") is not None else None,
+            "observationSpace": GeoProperty.from_dict(obj["observationSpace"]) if obj.get("observationSpace") is not None else None,
+            "operationSpace": GeoProperty.from_dict(obj["operationSpace"]) if obj.get("operationSpace") is not None else None,
             "createdAt": obj.get("createdAt"),
             "modifiedAt": obj.get("modifiedAt"),
             "deletedAt": obj.get("deletedAt"),
-            "name": Name.from_dict(obj.get("name")) if obj.get("name") is not None else None,
-            "description": Description.from_dict(obj.get("description")) if obj.get("description") is not None else None,
-            "hasSensor": HasSensor.from_dict(obj.get("hasSensor")) if obj.get("hasSensor") is not None else None
+            "name": Name.from_dict(obj["name"]) if obj.get("name") is not None else None,
+            "description": Description.from_dict(obj["description"]) if obj.get("description") is not None else None,
+            "hasSensor": HasSensor.from_dict(obj["hasSensor"]) if obj.get("hasSensor") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

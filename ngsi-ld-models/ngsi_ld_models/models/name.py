@@ -18,20 +18,16 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from typing import Any, ClassVar, Dict, List, Optional
-from pydantic import BaseModel, StrictStr, field_validator
-from pydantic import Field
+from pydantic import BaseModel, Field, StrictStr, field_validator
+from typing import Any, ClassVar, Dict, Optional
 from ngsi_ld_models.models.property_previous_value import PropertyPreviousValue
-from typing import Dict, Any
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+from typing import Optional, Set
+from typing_extensions import Self
 
 class Name(BaseModel):
     """
-    NGSI-LD Property Type. The IoT device name.  # noqa: E501
-    """
+    NGSI-LD Property Type. The IoT device name.
+    """ # noqa: E501
     type: Optional[StrictStr] = Field(default='Property', description="Node type. ")
     value: StrictStr
     observed_at: Optional[datetime] = Field(default=None, description="Is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time. ", alias="observedAt")
@@ -50,13 +46,14 @@ class Name(BaseModel):
         if value is None:
             return value
 
-        if value not in ('Property', 'Relationship', 'GeoProperty', 'LanguageProperty'):
-            raise ValueError("must be one of enum values ('Property', 'Relationship', 'GeoProperty', 'LanguageProperty')")
+        if value not in ('Property'):
+            raise ValueError("must be one of enum values ('Property')")
         return value
 
     model_config = {
         "populate_by_name": True,
-        "validate_assignment": True
+        "validate_assignment": True,
+        "protected_namespaces": (),
     }
 
 
@@ -70,7 +67,7 @@ class Name(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of Name from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
@@ -88,14 +85,16 @@ class Name(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * OpenAPI `readOnly` fields are excluded.
         """
+        excluded_fields: Set[str] = set([
+            "created_at",
+            "modified_at",
+            "deleted_at",
+            "instance_id",
+        ])
+
         _dict = self.model_dump(
             by_alias=True,
-            exclude={
-                "created_at",
-                "modified_at",
-                "deleted_at",
-                "instance_id",
-            },
+            exclude=excluded_fields,
             exclude_none=True,
         )
         # override the default output from pydantic by calling `to_dict()` of previous_value
@@ -104,7 +103,7 @@ class Name(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of Name from a dict"""
         if obj is None:
             return None
@@ -127,7 +126,7 @@ class Name(BaseModel):
             "modifiedAt": obj.get("modifiedAt"),
             "deletedAt": obj.get("deletedAt"),
             "instanceId": obj.get("instanceId"),
-            "previousValue": PropertyPreviousValue.from_dict(obj.get("previousValue")) if obj.get("previousValue") is not None else None
+            "previousValue": PropertyPreviousValue.from_dict(obj["previousValue"]) if obj.get("previousValue") is not None else None
         })
         return _obj
 

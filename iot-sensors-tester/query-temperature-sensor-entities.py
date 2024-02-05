@@ -2,11 +2,15 @@ import logging
 import logging.config
 import os
 import yaml
+from typing import List
 
 import ngsi_ld_client
 
 from ngsi_ld_models.models.temperature_sensor import TemperatureSensor
 from ngsi_ld_client.models.entity import Entity
+from ngsi_ld_client.models.query_entity_options_parameter_inner import QueryEntityOptionsParameterInner
+from ngsi_ld_client.models.options_sys_attrs import OptionsSysAttrs
+from ngsi_ld_client.models.options_representation import OptionsRepresentation
 
 from ngsi_ld_client.api_client import ApiClient as NGSILDClient
 from ngsi_ld_client.configuration import Configuration as NGSILDConfiguration
@@ -43,12 +47,17 @@ ngsi_ld.set_default_header(
     header_name="Accept",
     header_value="application/json"
 )
-
+options = []
 api_instance = ngsi_ld_client.ContextInformationConsumptionApi(ngsi_ld)
-
+sysAttrs = OptionsSysAttrs("sysAttrs")
+keyValues = OptionsRepresentation("keyValues")
+op = QueryEntityOptionsParameterInner(sysAttrs)
+print(op.to_dict())
+options.append(op.to_dict())
+print(options)
 try:
     # Query NGSI-LD entities of type Sensor: GET /entities
-    api_response = api_instance.query_entity(type='TemperatureSensor')
+    api_response = api_instance.query_entity(type='TemperatureSensor', q="temperature>=27.0", options=options)
     temperature_sensor_entities = api_response
     for temperature_sensor_entity in temperature_sensor_entities:
         logger.info(temperature_sensor_entity.to_dict())

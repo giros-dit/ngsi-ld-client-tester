@@ -3,6 +3,7 @@
 NGSI-LD Property Type that represents a humidity sensor. The humidity measurement. 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** | Node type.  | [optional] [default to 'Property']

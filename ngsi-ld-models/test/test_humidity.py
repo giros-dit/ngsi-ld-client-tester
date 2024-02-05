@@ -13,9 +13,8 @@
 
 
 import unittest
-import datetime
 
-from ngsi_ld_models.models.humidity import Humidity  # noqa: E501
+from ngsi_ld_models.models.humidity import Humidity
 
 class TestHumidity(unittest.TestCase):
     """Humidity unit test stubs"""
@@ -33,7 +32,7 @@ class TestHumidity(unittest.TestCase):
             optional params are included """
         # uncomment below to create an instance of `Humidity`
         """
-        model = Humidity()  # noqa: E501
+        model = Humidity()
         if include_optional:
             return Humidity(
                 type = 'Property',

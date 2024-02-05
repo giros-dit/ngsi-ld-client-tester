@@ -24,7 +24,7 @@ services:
   mongo-db:
     image: mongo:3.6
     hostname: mongo-db
-    container_name: db-mongo
+    container_name: mongo-db
     ports:
       - "27017:27017" 
     networks:

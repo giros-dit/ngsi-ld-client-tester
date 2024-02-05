@@ -3,6 +3,7 @@
 NGSI-LD Property Type. The IoT device description.
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** | Node type.  | [optional] [default to 'Property']
