@@ -75,7 +75,7 @@ class NGSILDHealthInfoAPI():
     
     def checkScorpioInfo(self):
         """
-        Checks NGSI-LD Scorpio broker build info.docker/notifier-tester/notifier_tester/api.py
+        Checks NGSI-LD Scorpio broker build info.
         """
         response = self._session.get(
             "{0}/q/info/".format(self.url),
