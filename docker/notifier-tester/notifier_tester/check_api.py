@@ -13,7 +13,7 @@ CORE_CONTEXT = "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"
 # Scorpio Broker FIWARE NGSI-LD API Walktrough.
 # See https://scorpio.readthedocs.io/en/latest/API_walkthrough.html
 
-class NGSILDAPI():
+class NGSILDHealthInfoAPI():
     def __init__(
             self, url: str = "http://scorpio:9090",
             headers: dict = {},
@@ -67,8 +67,19 @@ class NGSILDAPI():
         Checks NGSI-LD Scorpio broker status is up.
         """
         response = self._session.get(
-            "{0}/ngsi-ld/v1/subscriptions/".format(self.url),
+            "{0}/q/health/".format(self.url),
             verify=self.ssl_verification,
             headers=self.headers
         )
-        return response.ok
+        return response
+    
+    def checkScorpioInfo(self):
+        """
+        Checks NGSI-LD Scorpio broker build info.docker/notifier-tester/notifier_tester/api.py
+        """
+        response = self._session.get(
+            "{0}/q/info/".format(self.url),
+            verify=self.ssl_verification,
+            headers=self.headers
+        )
+        return response

@@ -12,7 +12,7 @@ from ngsi_ld_client.models.notification_params import NotificationParams
 from ngsi_ld_client.models.endpoint import Endpoint
 from ngsi_ld_client.api_client import ApiClient as NGSILDClient
 from ngsi_ld_client.configuration import Configuration as NGSILDConfiguration
-from notifier_tester.client import NGSILDHealthClient
+from notifier_tester.check_client import NGSILDHealthInfoClient
 from datetime import datetime,timezone
 from dateutil import parser
 
@@ -38,7 +38,7 @@ configuration = NGSILDConfiguration(host=BROKER_URI)
 configuration.debug = True
 ngsi_ld = NGSILDClient(configuration=configuration)
 
-ngsi_ld_api = NGSILDHealthClient(
+ngsi_ld_health_info_api = NGSILDHealthInfoClient(
     url="http://scorpio:9090",
     headers={"Accept": "application/json"},
     context="http://context-catalog:8080/context.jsonld")
@@ -82,7 +82,10 @@ app = FastAPI(
 async def startup_event():
     
     # Check if Scorpio API is up
-    ngsi_ld_api.check_scorpio_status()
+    ngsi_ld_health_info_api.check_scorpio_status()
+
+    # Check Scorpio build info
+    ngsi_ld_health_info_api.check_scorpio_info()
 
     for entity in LIST_ENTITIES:
         endpoint = Endpoint(

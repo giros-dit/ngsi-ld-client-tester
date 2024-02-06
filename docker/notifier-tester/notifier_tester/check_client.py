@@ -1,12 +1,12 @@
 import logging
 import time
 
-from notifier_tester.api import NGSILDAPI
+from notifier_tester.check_api import NGSILDHealthInfoAPI
 
 logger = logging.getLogger(__name__)
 
 
-class NGSILDHealthClient(object):
+class NGSILDHealthInfoClient(object):
     """
     Class encapsulating the main operations with NGSI-LD.
     """
@@ -16,7 +16,7 @@ class NGSILDHealthClient(object):
                  context: str = "http://context-catalog:8080/context.jsonld",
                  debug: bool = False):
         # Init NGSI-LD REST API Client
-        self.api = NGSILDAPI(url, headers=headers,
+        self.api = NGSILDHealthInfoAPI(url, headers=headers,
                              context=context, debug=debug)
 
     def check_scorpio_status(self):
@@ -26,9 +26,28 @@ class NGSILDHealthClient(object):
         """
         logger.info("Checking Scorpio REST API status ...")
         while True:
-            if self.api.checkScorpioHealth():
+            if self.api.checkScorpioHealth().ok:
                 logger.info(
                     "Successfully connected to Scorpio REST API!")
+                logger.info(self.api.checkScorpioHealth().json())
+                break
+            else:
+                logger.info("Could not connect to Scorpio REST API. "
+                               "Retrying in 1 second ...")
+                time.sleep(1)
+                continue
+
+    def check_scorpio_info(self):
+        """
+        Infinite loop that checks every 1 second
+        until Scorpio REST API becomes available.
+        """
+        logger.info("Checking Scorpio build information ...")
+        while True:
+            if self.api.checkScorpioInfo().ok:
+                logger.info(
+                    "Successfully connected to Scorpio REST API!")
+                logger.info(self.api.checkScorpioInfo().json())
                 break
             else:
                 logger.info("Could not connect to Scorpio REST API. "
