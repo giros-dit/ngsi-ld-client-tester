@@ -141,9 +141,9 @@ async def receiveNotification(request: Request):
         if entity["type"] == "TemperatureSensor":
             CURRENT_ITERATION += 1
             logger.info("Entity notification: %s\n" % entity)
-            if "observedAt" in entity and "modifiedAt" in entity:
-                current_time = datetime.utcnow().replace(tzinfo=timezone.utc).isoformat()
-                logger.info(f"Current time: {parser.parse(current_time)}") 
+            if "observedAt" in entity["temperature"] and "modifiedAt" in entity:
+                #current_time = datetime.utcnow().replace(tzinfo=timezone.utc).isoformat()
+                #logger.info(f"Current time: {parser.parse(current_time)}") 
                 #current_datetime = datetime.fromisoformat(current_time)   
                 #logger.info(f"Current time: {current_datetime}") 
 
