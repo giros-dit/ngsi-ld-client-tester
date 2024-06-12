@@ -8,7 +8,8 @@ import ngsi_ld_client
 
 from ngsi_ld_models.models.iot_device import IotDevice
 from ngsi_ld_client.models.entity import Entity
-from ngsi_ld_models.models.has_sensor import HasSensor
+from ngsi_ld_models.models.has_humidity_sensor import HasHumiditySensor
+from ngsi_ld_models.models.has_temperature_sensor import HasTemperatureSensor
 from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
 
 from ngsi_ld_client.api_client import ApiClient as NGSILDClient
@@ -57,16 +58,14 @@ iot_device_json = '''{
         "type": "Property",
         "value": "IoT device with sensors."
     },
-    "hasSensor": [
-        {
-            "type": "Relationship",
-            "object": "urn:ngsi-ld:TemperatureSensor:1"
-        },
-        {
-            "type": "Relationship",
-            "object": "urn:ngsi-ld:HumiditySensor:1"
-        }
-    ]
+    "hasTemperatureSensor": {
+        "type": "Relationship",
+        "object": "urn:ngsi-ld:TemperatureSensor:1"
+    },
+    "hasHumiditySensor": {
+        "type": "Relationship",
+        "object": "urn:ngsi-ld:HumiditySensor:1"
+    }
 }'''
 
 iot_device = IotDevice.from_json(iot_device_json)

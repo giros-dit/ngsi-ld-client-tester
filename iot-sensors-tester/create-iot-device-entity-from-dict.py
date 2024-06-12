@@ -8,7 +8,6 @@ import ngsi_ld_client
 
 from ngsi_ld_models.models.iot_device import IotDevice
 from ngsi_ld_client.models.entity import Entity
-from ngsi_ld_models.models.has_sensor import HasSensor
 from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
 
 from ngsi_ld_client.api_client import ApiClient as NGSILDClient

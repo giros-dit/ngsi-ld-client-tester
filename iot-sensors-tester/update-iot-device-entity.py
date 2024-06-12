@@ -7,7 +7,8 @@ import ngsi_ld_client
 
 from ngsi_ld_models.models.iot_device import IotDevice
 from ngsi_ld_client.models.entity import Entity
-from ngsi_ld_models.models.has_sensor import HasSensor
+from ngsi_ld_models.models.has_temperature_sensor import HasTemperatureSensor
+from ngsi_ld_models.models.has_humidity_sensor import HasHumiditySensor
 
 from ngsi_ld_client.api_client import ApiClient as NGSILDClient
 from ngsi_ld_client.configuration import Configuration as NGSILDConfiguration
@@ -48,9 +49,10 @@ ngsi_ld.set_default_header(
 
 iot_device = IotDevice(
     type="IotDevice",
-    name={"type":"Property", "value": "IoT-Device"},
-    hasSensor=HasSensor.from_dict([{"type": "Relationship", "object": "urn:ngsi-ld:TemperatureSensor:1"},{"type": "Relationship", "object": "urn:ngsi-ld:HumiditySensor:2"}])
-    #hasSensor=HasSensor.from_dict({"type": "Relationship", "object": "urn:ngsi-ld:TemperatureSensor:1"})
+    name={"type":"Property", "value": "IoTDevice"},
+    description={"type":"Property", "value": "IoT device with temperature and humidity sensors"},
+    hasHumiditySensor=HasHumiditySensor.from_dict({"type": "Relationship", "object": "urn:ngsi-ld:HumiditySensor:1"}),
+    hasTemperatureSensor=HasTemperatureSensor.from_dict({"type": "Relationship", "object": "urn:ngsi-ld:TemperatureSensor:1"})
 )
 
 api_instance = ngsi_ld_client.ContextInformationProvisionApi(ngsi_ld)

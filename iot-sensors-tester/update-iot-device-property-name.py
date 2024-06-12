@@ -6,7 +6,7 @@ import yaml
 import ngsi_ld_client
 
 from ngsi_ld_models.models.iot_device import IotDevice
-from ngsi_ld_models.models.name import Name
+from ngsi_ld_models.models.iot_name import IotName
 from ngsi_ld_client.models.entity import Entity
 from ngsi_ld_client.models.model_property import ModelProperty
 from ngsi_ld_client.models.property_value import PropertyValue
@@ -53,7 +53,7 @@ ngsi_ld.set_default_header(
 api_instance = ngsi_ld_client.ContextInformationProvisionApi(ngsi_ld)
 
 '''
-name = Name(
+name = IotName(
     type='Property',
     value='IotDeviceSensors'
 )

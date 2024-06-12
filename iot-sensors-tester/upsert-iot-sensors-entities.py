@@ -1,7 +1,7 @@
 import logging
 import logging.config
 import yaml
-import _osx_support
+import os
 
 import ngsi_ld_client
 from ngsi_ld_models.models.iot_device import IotDevice
@@ -48,21 +48,22 @@ ngsi_ld.set_default_header(
 entities_input = []
 
 iot_device = IotDevice(
-    id="urn:ngsi-ld:IotDevice:2",
+    id="urn:ngsi-ld:IotDevice:1",
     type="IotDevice",
     name={"type":"Property", "value": "IoTDevice"},
     description={"type": "Property", "value": "IoT device with sensors."},
-    hasSensor=[{"type": "Relationship", "object": "urn:ngsi-ld:TemperatureSensor:2"},{"type": "Relationship", "object": "urn:ngsi-ld:HumiditySensor:2"}]
+    hasTemperatureSensor={"type": "Relationship", "object": "urn:ngsi-ld:TemperatureSensor:1"},
+    hasHumiditySensor={"type": "Relationship", "object": "urn:ngsi-ld:HumiditySensor:1"}
 )
 
 temperature_sensor = TemperatureSensor(
-    id="urn:ngsi-ld:TemperatureSensor:2",
+    id="urn:ngsi-ld:TemperatureSensor:1",
     type="TemperatureSensor",
     temperature={"type":"Property", "value": 29.9, "unitCode": "CEL"}
 )
 
 humidity_sensor = HumiditySensor(
-    id="urn:ngsi-ld:HumiditySensor:2",
+    id="urn:ngsi-ld:HumiditySensor:1",
     type="HumiditySensor",
     humidity={"type":"Property", "value": 32.8, "unitCode": "P1"}
 )

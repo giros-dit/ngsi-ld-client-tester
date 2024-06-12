@@ -7,7 +7,7 @@ authors = ["GIROS-DIT UPM <gi.giros@upm.es>"]
 [tool.poetry.dependencies]
 python = "^3.9.5"
 ngsi_ld_models = ">=1.0.0"
-ngsi_ld_client = { git = "https://github.com/giros-dit/python-ngsi-ld-client.git", branch = "1.6.1" }
+ngsi_ld_client = { git = "https://github.com/giros-dit/python-ngsi-ld-client.git", branch = "1.7.1" }
 pyyaml = "^6.0"
 markupsafe = ">=2.1.0,<2.1.5"
 

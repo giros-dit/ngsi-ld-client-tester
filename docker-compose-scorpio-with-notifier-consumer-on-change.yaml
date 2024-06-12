@@ -1,0 +1,43 @@
+version: "3.5"
+services:
+  context-catalog:
+    image: halverneus/static-file-server
+    hostname: context-catalog
+    container_name: context-catalog
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./docker/context-catalog:/web
+  postgres:
+    image: postgis/postgis
+    ports:
+      - "5432"
+    environment:
+      POSTGRES_USER: ngb
+      POSTGRES_PASSWORD: ngb
+      POSTGRES_DB: ngb
+  scorpio:
+    image: scorpiobroker/all-in-one-runner:java-latest
+    hostname: scorpio
+    container_name: scorpio
+    ports:
+      - "9090:9090"
+    depends_on:
+      - postgres 
+  scorpio-notifier-consumer-on-change:
+    build:
+      context: .
+      dockerfile: ./docker/scorpio-notifier-consumer-on-change/Dockerfile
+    hostname: scorpio-notifier-consumer-on-change
+    container_name: scorpio-notifier-consumer-on-change
+    expose:
+      - "8082"
+    ports:
+      - "8082:8082"
+    volumes:
+      - ./docker/scorpio-notifier-consumer-on-change/scorpio_notifier_consumer_on_change:/opt/scorpio-notifier-consumer-on-change/scorpio_notifier_consumer_on_change
+    depends_on:
+      scorpio:
+        condition: service_started

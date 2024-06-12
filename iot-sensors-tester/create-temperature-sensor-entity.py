@@ -22,7 +22,7 @@ logging.config.dictConfig(config)
 logger = logging.getLogger(__name__)
 
 # NGSI-LD Context Broker
-BROKER_URI = os.getenv("BROKER_URI", "http://localhost:9090/ngsi-ld/v1")
+BROKER_URI = os.getenv("BROKER_URI", "http://localhost:1026/ngsi-ld/v1")
 # Context Catalog
 CONTEXT_CATALOG_URI = os.getenv("CONTEXT_CATALOG_URI",
                                 "http://context-catalog:8080/context.jsonld")
@@ -67,4 +67,3 @@ try:
     api_instance.create_entity(query_entity200_response_inner=query_entity_input)
 except Exception as e:
     logger.exception("Exception when calling ContextInformationProvisionApi->create_entity: %s\n" % e)
-
