@@ -22,7 +22,7 @@ CONTEXT_CATALOG_URI = os.getenv("CONTEXT_CATALOG_URI",
                                 "http://context-catalog:8080/context.jsonld")
 
 # Notifier
-NOTIFIER_URI = os.getenv("NOTIFIER_URI", "http://scorpio-notifier-consumer-on-change:8082/notify")
+NOTIFIER_URI = os.getenv("NOTIFIER_URI", "http://scorpio-notifier-consumer-on-change:8084/notify")
 
 # Init NGSI-LD Client
 configuration = NGSILDConfiguration(host=BROKER_URI)
@@ -71,31 +71,12 @@ async def startup_event():
             accept="application/json"
         )
 
-        # Periodic Subscriptions
-        """
-        notification_params = NotificationParams (
-            endpoint=endpoint,
-            format="normalized"
-            # attributes=["name"]
-        )
-
-        subs_request = CreateSubscriptionRequest (
-            id="urn:ngsi-ld:Subscription:Periodic:{0}".format(entity),
-            type="Subscription",
-            entities=[{ "type": entity }],
-            description="Periodic subscription Test.",
-            timeInterval= 10,
-            notification=notification_params
-        )
-        """
-
         # On-Change Subscriptions
         notification_params = NotificationParams (
             endpoint=endpoint,
             format="normalized",
             attributes=["temperature", "humidity"],
-            sysAttrs=True,
-            showChanges=True
+            sysAttrs=True
         )
 
         subs_request = CreateSubscriptionRequest (

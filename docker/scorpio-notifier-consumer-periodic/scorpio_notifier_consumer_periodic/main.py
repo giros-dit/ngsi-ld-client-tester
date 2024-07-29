@@ -24,7 +24,7 @@ CONTEXT_CATALOG_URI = os.getenv("CONTEXT_CATALOG_URI",
                                 "http://context-catalog:8080/context.jsonld")
 
 # Notifier
-NOTIFIER_URI = os.getenv("NOTIFIER_URI", "http://scorpio-notifier-consumer-periodic:8082/notify")
+NOTIFIER_URI = os.getenv("NOTIFIER_URI", "http://scorpio-notifier-consumer-periodic:8084/notify")
 
 # Init NGSI-LD Client
 configuration = NGSILDConfiguration(host=BROKER_URI)
@@ -90,25 +90,6 @@ async def startup_event():
             notification=notification_params
         )
 
-        # On-Change Subscriptions        
-        """
-        notification_params = NotificationParams (
-            endpoint=endpoint,
-            format="normalized",
-            # attributes=["temperature"],
-            sysAttrs=True
-            #showChanges=True
-        )
-
-        subs_request = CreateSubscriptionRequest (
-            id="urn:ngsi-ld:Subscription:{0}".format(entity),
-            type="Subscription",
-            entities=[{ "type": entity }],
-            description="On-change subscription to TemperatureSensor entities for changes within temperature property.",
-            watchedAttributes=["temperature"],
-            notification=notification_params
-        )
-        """
         api_instance = ngsi_ld_client.ContextInformationSubscriptionApi(ngsi_ld)
         api_instance.create_subscription(create_subscription_request=subs_request)
 

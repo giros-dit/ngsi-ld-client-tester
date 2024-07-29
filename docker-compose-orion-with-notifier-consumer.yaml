@@ -1,5 +1,36 @@
 version: "3.5"
 services:
+  cors-proxy-orion:
+    build:
+      context: ./docker/cors-proxy-orion/
+      dockerfile: Dockerfile
+    hostname: cors-proxy-orion
+    container_name: cors-proxy-orion
+    expose:
+      - "8083"
+    ports:
+      - "8083:8083"
+    depends_on:
+      orion:
+        condition: service_started
+  swagger-editor:
+    image: swaggerapi/swagger-editor
+    container_name: "swagger-editor"
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./swagger/ngsi-ld-api.yaml:/ngsi-ld-api.yaml
+    environment:
+      SWAGGER_FILE: /ngsi-ld-api.yaml
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: "swagger-ui"
+    ports:
+      - "8084:8080"
+    volumes:
+      - ./swagger/ngsi-ld-api.yaml:/ngsi-ld-api.yaml
+    environment:
+      SWAGGER_JSON: /ngsi-ld-api.yaml
   context-catalog:
     image: halverneus/static-file-server
     hostname: context-catalog
