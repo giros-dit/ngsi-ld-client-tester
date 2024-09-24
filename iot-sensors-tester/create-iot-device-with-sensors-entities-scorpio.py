@@ -6,12 +6,18 @@ import ngsi_ld_client
 
 # Importing Python library modules to use the OpenAPI schemas defined for the IoT use case:
 from ngsi_ld_models.models.temperature_sensor import TemperatureSensor
+from ngsi_ld_models.models.temperature import Temperature
+from ngsi_ld_models.models.temperature_description import TemperatureDescription
+from ngsi_ld_models.models.temperature_coordinates import TemperatureCoordinates
+from ngsi_ld_models.models.temperature_coordinates_description import TemperatureCoordinatesDescription
 from ngsi_ld_models.models.humidity_sensor import HumiditySensor
 from ngsi_ld_models.models.iot_device import IotDevice
 from ngsi_ld_models.models.has_temperature_sensor import HasTemperatureSensor
 from ngsi_ld_models.models.has_humidity_sensor import HasHumiditySensor
 # Importing Python library modules to use the self-defined OpenAPI schemas within the NGSI-LD OAS:
 from ngsi_ld_client.models.entity import Entity
+from ngsi_ld_client.models.geometry import Geometry
+from ngsi_ld_client.models.geometry_point import GeometryPoint
 from ngsi_ld_client.models.query_entity200_response_inner import QueryEntity200ResponseInner
 
 # Importing Python library modules to use the NGSI-LD API client:

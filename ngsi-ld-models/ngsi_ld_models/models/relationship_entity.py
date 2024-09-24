@@ -17,28 +17,23 @@ import json
 import pprint
 from pydantic import BaseModel, ConfigDict, Field, StrictStr, ValidationError, field_validator
 from typing import Any, List, Optional
-from ngsi_ld_models.models.model_property import ModelProperty
-from ngsi_ld_models.models.relationship import Relationship
+from ngsi_ld_models.models.entity import Entity
 from pydantic import StrictStr, Field
 from typing import Union, List, Set, Optional, Dict
 from typing_extensions import Literal, Self
 
-GEOPROPERTYVALUE_ONE_OF_SCHEMAS = ["List[ModelProperty]", "List[Relationship]", "ModelProperty", "Relationship"]
+RELATIONSHIPENTITY_ONE_OF_SCHEMAS = ["Entity", "List[Entity]"]
 
-class GeoPropertyValue(BaseModel):
+class RelationshipEntity(BaseModel):
     """
-    GeoPropertyValue
+    An inline Entity obtained by Linked Entity Retrieval, corresponding to the Relationship's target object. See clause 4.5.23.2. Only used in Linked Entity  Retrieval, if the join=inline option is explicitly requested. 
     """
-    # data type: ModelProperty
-    oneof_schema_1_validator: Optional[ModelProperty] = None
-    # data type: List[ModelProperty]
-    oneof_schema_2_validator: Optional[List[ModelProperty]] = None
-    # data type: Relationship
-    oneof_schema_3_validator: Optional[Relationship] = None
-    # data type: List[Relationship]
-    oneof_schema_4_validator: Optional[List[Relationship]] = None
-    actual_instance: Optional[Union[List[ModelProperty], List[Relationship], ModelProperty, Relationship]] = None
-    one_of_schemas: Set[str] = { "List[ModelProperty]", "List[Relationship]", "ModelProperty", "Relationship" }
+    # data type: Entity
+    oneof_schema_1_validator: Optional[Entity] = None
+    # data type: List[Entity]
+    oneof_schema_2_validator: Optional[List[Entity]] = None
+    actual_instance: Optional[Union[Entity, List[Entity]]] = None
+    one_of_schemas: Set[str] = { "Entity", "List[Entity]" }
 
     model_config = ConfigDict(
         validate_assignment=True,
@@ -58,37 +53,26 @@ class GeoPropertyValue(BaseModel):
 
     @field_validator('actual_instance')
     def actual_instance_must_validate_oneof(cls, v):
-        instance = GeoPropertyValue.model_construct()
+        instance = RelationshipEntity.model_construct()
         error_messages = []
         match = 0
-        # validate data type: ModelProperty
-        if not isinstance(v, ModelProperty):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `ModelProperty`")
+        # validate data type: Entity
+        if not isinstance(v, Entity):
+            error_messages.append(f"Error! Input type `{type(v)}` is not `Entity`")
         else:
             match += 1
-        # validate data type: List[ModelProperty]
+        # validate data type: List[Entity]
         try:
             instance.oneof_schema_2_validator = v
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # validate data type: Relationship
-        if not isinstance(v, Relationship):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `Relationship`")
-        else:
-            match += 1
-        # validate data type: List[Relationship]
-        try:
-            instance.oneof_schema_4_validator = v
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when setting `actual_instance` in GeoPropertyValue with oneOf schemas: List[ModelProperty], List[Relationship], ModelProperty, Relationship. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when setting `actual_instance` in RelationshipEntity with oneOf schemas: Entity, List[Entity]. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when setting `actual_instance` in GeoPropertyValue with oneOf schemas: List[ModelProperty], List[Relationship], ModelProperty, Relationship. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when setting `actual_instance` in RelationshipEntity with oneOf schemas: Entity, List[Entity]. Details: " + ", ".join(error_messages))
         else:
             return v
 
@@ -103,13 +87,13 @@ class GeoPropertyValue(BaseModel):
         error_messages = []
         match = 0
 
-        # deserialize data into ModelProperty
+        # deserialize data into Entity
         try:
-            instance.actual_instance = ModelProperty.from_json(json_str)
+            instance.actual_instance = Entity.from_json(json_str)
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into List[ModelProperty]
+        # deserialize data into List[Entity]
         try:
             # validation
             instance.oneof_schema_2_validator = json.loads(json_str)
@@ -118,28 +102,13 @@ class GeoPropertyValue(BaseModel):
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # deserialize data into Relationship
-        try:
-            instance.actual_instance = Relationship.from_json(json_str)
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        # deserialize data into List[Relationship]
-        try:
-            # validation
-            instance.oneof_schema_4_validator = json.loads(json_str)
-            # assign value to actual_instance
-            instance.actual_instance = instance.oneof_schema_4_validator
-            match += 1
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
 
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when deserializing the JSON string into GeoPropertyValue with oneOf schemas: List[ModelProperty], List[Relationship], ModelProperty, Relationship. Details: " + ", ".join(error_messages))
+            raise ValueError("Multiple matches found when deserializing the JSON string into RelationshipEntity with oneOf schemas: Entity, List[Entity]. Details: " + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when deserializing the JSON string into GeoPropertyValue with oneOf schemas: List[ModelProperty], List[Relationship], ModelProperty, Relationship. Details: " + ", ".join(error_messages))
+            raise ValueError("No match found when deserializing the JSON string into RelationshipEntity with oneOf schemas: Entity, List[Entity]. Details: " + ", ".join(error_messages))
         else:
             return instance
 
@@ -153,7 +122,7 @@ class GeoPropertyValue(BaseModel):
         else:
             return json.dumps(self.actual_instance)
 
-    def to_dict(self) -> Optional[Union[Dict[str, Any], List[ModelProperty], List[Relationship], ModelProperty, Relationship]]:
+    def to_dict(self) -> Optional[Union[Dict[str, Any], Entity, List[Entity]]]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None

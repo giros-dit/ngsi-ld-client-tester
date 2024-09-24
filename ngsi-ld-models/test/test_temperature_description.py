@@ -14,10 +14,10 @@
 
 import unittest
 
-from ngsi_ld_models.models.geo_property_value import GeoPropertyValue
+from ngsi_ld_models.models.temperature_description import TemperatureDescription
 
-class TestGeoPropertyValue(unittest.TestCase):
-    """GeoPropertyValue unit test stubs"""
+class TestTemperatureDescription(unittest.TestCase):
+    """TemperatureDescription unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,37 +25,35 @@ class TestGeoPropertyValue(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> GeoPropertyValue:
-        """Test GeoPropertyValue
-            include_option is a boolean, when False only required
+    def make_instance(self, include_optional) -> TemperatureDescription:
+        """Test TemperatureDescription
+            include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `GeoPropertyValue`
+        # uncomment below to create an instance of `TemperatureDescription`
         """
-        model = GeoPropertyValue()
+        model = TemperatureDescription()
         if include_optional:
-            return GeoPropertyValue(
+            return TemperatureDescription(
                 type = 'Property',
-                value = None,
+                value = '',
                 observed_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 unit_code = '',
                 dataset_id = '',
-                system_generated_attrs = ngsi_ld_models.models.system_generated_attributes.SystemGeneratedAttributes(
-                    created_at = null, 
-                    modified_at = null, 
-                    deleted_at = null, ),
+                created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
+                modified_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
+                deleted_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 instance_id = '',
-                previous_value = None,
-                object = '',
-                previous_object = ''
+                previous_value = None
             )
         else:
-            return GeoPropertyValue(
+            return TemperatureDescription(
+                value = '',
         )
         """
 
-    def testGeoPropertyValue(self):
-        """Test GeoPropertyValue"""
+    def testTemperatureDescription(self):
+        """Test TemperatureDescription"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

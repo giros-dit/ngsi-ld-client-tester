@@ -20,7 +20,9 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, Optional
-from ngsi_ld_models.models.system_generated_attributes import SystemGeneratedAttributes
+from ngsi_ld_models.models.relationship_entity import RelationshipEntity
+from ngsi_ld_models.models.relationship_object_type import RelationshipObjectType
+from ngsi_ld_models.models.relationship_previous_object import RelationshipPreviousObject
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -30,12 +32,16 @@ class HasTemperatureSensor(BaseModel):
     """ # noqa: E501
     type: Optional[StrictStr] = Field(default='Relationship', description="Node type. ")
     object: StrictStr
-    observed_at: Optional[datetime] = Field(default=None, description="Timestamp. See clause 4.8. ", alias="observedAt")
+    object_type: Optional[RelationshipObjectType] = Field(default=None, alias="objectType")
+    observed_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which a certain Property or Relationship became valid or was observed. For example, a temperature Value was measured by the sensor at this point in time. ", alias="observedAt")
     dataset_id: Optional[StrictStr] = Field(default=None, description="It allows identifying a set or group of target relationship objects. ", alias="datasetId")
-    system_generated_attrs: Optional[SystemGeneratedAttributes] = Field(default=None, alias="systemGeneratedAttrs")
-    instance_id: Optional[StrictStr] = Field(default=None, description="A URI uniquely identifying a Relationship instance (see clause 4.5.8). System generated. ", alias="instanceId")
-    previous_object: Optional[StrictStr] = Field(default=None, description="Previous Relationship's target object. Only used in notifications, if the showChanges  option is explicitly requested. ", alias="previousObject")
-    __properties: ClassVar[List[str]] = ["type", "object", "observedAt", "datasetId", "systemGeneratedAttrs", "instanceId", "previousObject"]
+    created_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system.  Entity creation timestamp. See clause 4.8. ", alias="createdAt")
+    modified_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value.  Entity last modification timestamp. See clause 4.8. ", alias="modifiedAt")
+    deleted_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8. It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ", alias="deletedAt")
+    instance_id: Optional[StrictStr] = Field(default=None, description="A URI uniquely identifying a Relationship instance as mandated by clause 4.5.8. System generated. Only used in temporal representation of Relationships. ", alias="instanceId")
+    previous_object: Optional[RelationshipPreviousObject] = Field(default=None, alias="previousObject")
+    entity: Optional[RelationshipEntity] = None
+    __properties: ClassVar[List[str]] = ["type", "object", "objectType", "observedAt", "datasetId", "createdAt", "modifiedAt", "deletedAt", "instanceId", "previousObject", "entity"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
@@ -78,11 +84,9 @@ class HasTemperatureSensor(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         * OpenAPI `readOnly` fields are excluded.
-        * OpenAPI `readOnly` fields are excluded.
         """
         excluded_fields: Set[str] = set([
             "instance_id",
-            "previous_object",
         ])
 
         _dict = self.model_dump(
@@ -90,9 +94,15 @@ class HasTemperatureSensor(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of system_generated_attrs
-        if self.system_generated_attrs:
-            _dict['systemGeneratedAttrs'] = self.system_generated_attrs.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of object_type
+        if self.object_type:
+            _dict['objectType'] = self.object_type.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of previous_object
+        if self.previous_object:
+            _dict['previousObject'] = self.previous_object.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of entity
+        if self.entity:
+            _dict['entity'] = self.entity.to_dict()
         return _dict
 
     @classmethod
@@ -104,19 +114,18 @@ class HasTemperatureSensor(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        # raise errors for additional fields in the input
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                raise ValueError("Error due to additional fields (not defined in HasTemperatureSensor) in the input: " + _key)
-
         _obj = cls.model_validate({
             "type": obj.get("type") if obj.get("type") is not None else 'Relationship',
             "object": obj.get("object"),
+            "objectType": RelationshipObjectType.from_dict(obj["objectType"]) if obj.get("objectType") is not None else None,
             "observedAt": obj.get("observedAt"),
             "datasetId": obj.get("datasetId"),
-            "systemGeneratedAttrs": SystemGeneratedAttributes.from_dict(obj["systemGeneratedAttrs"]) if obj.get("systemGeneratedAttrs") is not None else None,
+            "createdAt": obj.get("createdAt"),
+            "modifiedAt": obj.get("modifiedAt"),
+            "deletedAt": obj.get("deletedAt"),
             "instanceId": obj.get("instanceId"),
-            "previousObject": obj.get("previousObject")
+            "previousObject": RelationshipPreviousObject.from_dict(obj["previousObject"]) if obj.get("previousObject") is not None else None,
+            "entity": RelationshipEntity.from_dict(obj["entity"]) if obj.get("entity") is not None else None
         })
         return _obj
 

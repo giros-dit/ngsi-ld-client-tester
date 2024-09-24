@@ -14,10 +14,10 @@
 
 import unittest
 
-from ngsi_ld_models.models.geo_property_previous_value import GeoPropertyPreviousValue
+from ngsi_ld_models.models.temperature_coordinates import TemperatureCoordinates
 
-class TestGeoPropertyPreviousValue(unittest.TestCase):
-    """GeoPropertyPreviousValue unit test stubs"""
+class TestTemperatureCoordinates(unittest.TestCase):
+    """TemperatureCoordinates unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,29 +25,29 @@ class TestGeoPropertyPreviousValue(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> GeoPropertyPreviousValue:
-        """Test GeoPropertyPreviousValue
-            include_option is a boolean, when False only required
+    def make_instance(self, include_optional) -> TemperatureCoordinates:
+        """Test TemperatureCoordinates
+            include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `GeoPropertyPreviousValue`
+        # uncomment below to create an instance of `TemperatureCoordinates`
         """
-        model = GeoPropertyPreviousValue()
+        model = TemperatureCoordinates()
         if include_optional:
-            return GeoPropertyPreviousValue(
-                type = 'MultiPolygon',
+            return TemperatureCoordinates(
+                type = 'Point',
                 coordinates = [
-                    ngsi_ld_models.models.geometry/line_string.Geometry.LineString(
-                        type = 'LineString', )
-                    ]
+                    1.337
+                    ],
+                temperature_coordinates_description = None
             )
         else:
-            return GeoPropertyPreviousValue(
+            return TemperatureCoordinates(
         )
         """
 
-    def testGeoPropertyPreviousValue(self):
-        """Test GeoPropertyPreviousValue"""
+    def testTemperatureCoordinates(self):
+        """Test TemperatureCoordinates"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 
