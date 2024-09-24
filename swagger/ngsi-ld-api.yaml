@@ -10,7 +10,7 @@ info:
     url: https://forge.etsi.org/legal-matters
 
 externalDocs:
-  description: ETSI GS CIM 009 V1.7.1 cross-cutting Context Information Management (CIM); NGSI-LD API
+  description: ETSI GS CIM 009 V1.7.1 Context Information Management (CIM); NGSI-LD API
   url: https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.07.01_60/gs_CIM009v010701p.pdf
 
 servers:
@@ -78,11 +78,6 @@ paths:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
         '207':
-          headers:
-            Location:
-              $ref: '#/components/headers/Location'
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
           $ref: '#/components/responses/MultiStatus.BatchOperationResult'
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -166,18 +161,8 @@ paths:
               schema:
                   $ref: '#/components/schemas/FeatureCollection'
         '400':
-          headers:
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
-            NGSILD-Warning:
-              $ref: '#/components/headers/NGSILD-Warning'
           $ref: '#/components/responses/BadRequest'
         '501':
-          headers:
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
-            NGSILD-Warning:
-              $ref: '#/components/headers/NGSILD-Warning'
           $ref: '#/components/responses/NotImplemented'
 
   /entities/{entityId}:
@@ -241,25 +226,10 @@ paths:
               schema:
                   $ref: '#/components/schemas/Feature'
         '400':
-          headers:
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
-            NGSILD-Warning:
-              $ref: '#/components/headers/NGSILD-Warning'
           $ref: '#/components/responses/BadRequest'
         '404':
-          headers:
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
-            NGSILD-Warning:
-              $ref: '#/components/headers/NGSILD-Warning'
           $ref: '#/components/responses/NotFound'
         '501':
-          headers:
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
-            NGSILD-Warning:
-              $ref: '#/components/headers/NGSILD-Warning'
           $ref: '#/components/responses/NotImplemented'
     delete:
       tags:
@@ -289,19 +259,10 @@ paths:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
         '207':
-          headers:
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
           $ref: '#/components/responses/MultiStatus.BatchOperationResult'
         '400':
-          headers:
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
           $ref: '#/components/responses/BadRequest'
         '404':
-          headers:
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
           $ref: '#/components/responses/NotFound'
     patch:
       tags:
@@ -750,6 +711,8 @@ paths:
           headers:
             NGSILD-Results-Count:
               $ref: '#/components/headers/NGSILD-Results-Count'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -805,6 +768,9 @@ paths:
         '200':
           description: |
             A response body containing the JSON-LD representation of the target subscription.
+          headers:
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -973,6 +939,8 @@ paths:
               $ref: '#/components/headers/NGSILD-Tenant'
             NGSILD-Results-Count:
               $ref: '#/components/headers/NGSILD-Results-Count'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -1029,6 +997,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -1182,6 +1152,8 @@ paths:
               $ref: '#/components/headers/NGSILD-Tenant'
             NGSILD-Results-Count:
               $ref: '#/components/headers/NGSILD-Results-Count'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -1239,6 +1211,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -1689,6 +1663,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -1844,6 +1820,8 @@ paths:
 
         This operation allows querying the temporal evolution of Entities present in an NGSI-LD system.
         It is similar to the operation defined by clause 5.7.2 (Query Entities) with the addition of a temporal query.
+      
+        *The query parameters timerel and timeAt are required.
       operationId: queryTemporal
       parameters:
         # Query params
@@ -1859,9 +1837,7 @@ paths:
         - $ref: '#/components/parameters/Query.geoproperty'
         - $ref: '#/components/parameters/Query.timeproperty'
         - $ref: '#/components/parameters/Query.timerel'
-          required: true
         - $ref: '#/components/parameters/Query.timeAt'
-          required: true
         - $ref: '#/components/parameters/Query.endTimeAt'
         - $ref: '#/components/parameters/Query.lastN'
         - $ref: '#/components/parameters/Query.lang'
@@ -1886,6 +1862,8 @@ paths:
               $ref: '#/components/headers/NGSILD-Tenant'
             NGSILD-Results-Count:
               $ref: '#/components/headers/NGSILD-Results-Count'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -1951,6 +1929,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -2175,6 +2155,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -2246,6 +2228,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -2309,6 +2293,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -2372,6 +2358,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -2434,6 +2422,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -2532,6 +2522,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -2585,6 +2577,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -3083,7 +3077,7 @@ components:
       schema:
         type: array
         items:
-            $ref: '#/components/schemas/options.noOverwrite'
+          $ref: '#/components/schemas/options.noOverwrite'
       required: false
     Query.options.sysAttrs:
       name: options
@@ -3208,6 +3202,7 @@ components:
               - $ref: '#/components/schemas/Relationship'
               - $ref: '#/components/schemas/GeoProperty'
               - $ref: '#/components/schemas/LanguageProperty'
+              - $ref: '#/components/schemas/VocabularyProperty'
         application/json+ld:
           schema:
             allOf:
@@ -3220,6 +3215,7 @@ components:
                 - $ref: '#/components/schemas/Relationship'
                 - $ref: '#/components/schemas/GeoProperty'
                 - $ref: '#/components/schemas/LanguageProperty'
+                - $ref: '#/components/schemas/VocabularyProperty'
               - required:
                   - '@context'
     EntityTemporal:
@@ -3390,25 +3386,6 @@ components:
     #
     # Beginning of 4.8 Temporal Properties
     #
-    SystemGeneratedAttributes:
-      description: |
-        5.2.2 Common members. 
-        
-        For grouping the subschemas of system-generated temporal attributes: createdAt, modifiedAt, and deletedAt.
-      type: object
-      properties:
-        createdAt: 
-          allOf:
-            - $ref: '#/components/schemas/CreatedAt'
-          readOnly: true
-        modifiedAt:
-          allOf:
-            - $ref: '#/components/schemas/ModifiedAt'
-          readOnly: true
-        deletedAt:
-          allOf:
-            - $ref: '#/components/schemas/DeletedAt'
-          readOnly: true
     CreatedAt:
       description: |
         It is defined as the temporal Property at which the Entity, Property or
@@ -3751,9 +3728,15 @@ components:
             to limit unnecessary distributed operation requests.
           $ref: '#/components/schemas/RegistrationManagementInfo'
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'        
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true
         status:
           description: |
             Read-only. Status of the Registration. It shall be "ok" if the last attempt to perform a distributed
@@ -3892,9 +3875,15 @@ components:
             See clause 4.7.
           $ref: '#/components/schemas/GeoProperty'
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true
       additionalProperties:
         oneOf:
           - $ref: '#/components/schemas/Property'
@@ -4008,9 +3997,15 @@ components:
             See clause 4.7.
           $ref: '#/components/schemas/GeoProperty'
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true
       additionalProperties:
         oneOf:
           - type: array
@@ -4229,7 +4224,6 @@ components:
       maxItems: 3
       items:
         type: number
-      additionalProperties: false
     Geometry.positionArray:
       description: |
         An array of positions.
@@ -4351,9 +4345,15 @@ components:
           type: string
           format: uri
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true
         instanceId:
           description: |
             A URI uniquely identifying a Property instance,
@@ -4452,9 +4452,15 @@ components:
           type: string
           format: uri
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true
         instanceId:
           description: |
             A URI uniquely identifying a Property instance,
@@ -4739,6 +4745,13 @@ components:
           description: |
             A human-readable explanation specific to this occurrence of the
             problem.
+            
+            *InvalidRequest: The request associated to the operation is 
+            syntactically invalid or includes wrong content. If an HTTP request 
+            for an operation contains parameters that are incompatible with the 
+            operation, or it contains values of the "options" parameter that are 
+            not supported by the operation, an HTTP error response of type 
+            InvalidRequest should be returned.  
           type: string
         instance:
           description: |
@@ -4781,9 +4794,15 @@ components:
           type: string
           format: uri
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true
         instanceId:
           description: |
             A URI uniquely identifying a Property instance,
@@ -4795,10 +4814,9 @@ components:
           description: |
             Previous Property value. Only used in notifications, if the showChanges 
             option is explicitly requested.
-          allOf:
-            - oneOf:
-              - $ref: '#/components/schemas/DateTimeValue'
-              - $ref: '#/components/schemas/AnyValue'
+          oneOf:
+            - $ref: '#/components/schemas/DateTimeValue'
+            - $ref: '#/components/schemas/AnyValue'
           readOnly: true
       additionalProperties:
         oneOf:
@@ -4960,9 +4978,15 @@ components:
           type: string
           format: uri
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'          
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true
         instanceId:
           description: |
             A URI uniquely identifying a Relationship instance
@@ -5080,9 +5104,15 @@ components:
             Language filter to be applied to the query (clause 4.15).
           type: string
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'        
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true       
         status:
           description: |
             Read-only. Provided by the system when querying the details of a subscription.
@@ -5243,9 +5273,15 @@ components:
           type: string
           format: uri
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true
         instanceId:
           description: |
             A URI uniquely identifying a Property instance,
@@ -5273,6 +5309,8 @@ components:
       headers:
         NGSILD-Tenant:
           $ref: '#/components/headers/NGSILD-Tenant'
+        NGSILD-Warning:
+          $ref: '#/components/headers/NGSILD-Warning'
       content:
         application/json:
           schema:
@@ -5290,12 +5328,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-        application/json+ld:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-        application/geo:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
     MultiStatus.BatchOperationResult:
       description: |
         If the entity input data matches to a registration, the relevant parts of the request are forwarded
@@ -5306,6 +5338,8 @@ components:
       headers:
         NGSILD-Tenant:
           $ref: '#/components/headers/NGSILD-Tenant'
+        Location:
+          $ref: '#/components/headers/Location'
       content:
         application/json:
           schema:
@@ -5338,14 +5372,10 @@ components:
       headers:
         NGSILD-Tenant:
           $ref: '#/components/headers/NGSILD-Tenant'
+        NGSILD-Warning:
+          $ref: '#/components/headers/NGSILD-Warning'
       content:
         application/json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-        application/json+ld:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-        application/geo:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
     ServiceUnavailable:
@@ -5358,12 +5388,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-        application/json+ld:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-        application/geo:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
     Unprocessable:
       description: |
         It is used to indicate that the operation is not available,
@@ -5372,14 +5396,10 @@ components:
       headers:
         NGSILD-Tenant:
           $ref: '#/components/headers/NGSILD-Tenant'
+        NGSILD-Warning:
+          $ref: '#/components/headers/NGSILD-Warning'
       content:
         application/json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-        application/json+ld:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-        application/geo:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
     NotImplemented:
@@ -5389,13 +5409,9 @@ components:
       headers:
         NGSILD-Tenant:
           $ref: '#/components/headers/NGSILD-Tenant'
+        NGSILD-Warning:
+            $ref: '#/components/headers/NGSILD-Warning'
       content:
         application/json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-        application/json+ld:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-        application/geo:
           schema:
             $ref: '#/components/schemas/ProblemDetails'

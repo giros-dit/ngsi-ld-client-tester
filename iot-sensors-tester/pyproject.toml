@@ -10,6 +10,7 @@ ngsi_ld_models = ">=1.0.0"
 ngsi_ld_client = { git = "https://github.com/giros-dit/python-ngsi-ld-client.git", branch = "1.7.1" }
 pyyaml = "^6.0"
 markupsafe = ">=2.1.0,<2.1.5"
+numpy = "^1.26.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

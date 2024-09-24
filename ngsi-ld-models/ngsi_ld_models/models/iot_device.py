@@ -17,6 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
+from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from ngsi_ld_models.models.entity_scope import EntityScope
@@ -25,7 +26,6 @@ from ngsi_ld_models.models.has_humidity_sensor import HasHumiditySensor
 from ngsi_ld_models.models.has_temperature_sensor import HasTemperatureSensor
 from ngsi_ld_models.models.iot_description import IotDescription
 from ngsi_ld_models.models.iot_name import IotName
-from ngsi_ld_models.models.system_generated_attributes import SystemGeneratedAttributes
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -36,16 +36,18 @@ class IotDevice(BaseModel):
     id: Optional[StrictStr] = Field(default=None, description="Entity id. ")
     type: StrictStr = Field(description="NGSI-LD Entity identifier. It has to be IotDevice.")
     scope: Optional[EntityScope] = None
-    location: Optional[GeoProperty] = Field(default=None, description="Default geospatial Property of an entity. See clause 4.7. ")
-    observation_space: Optional[GeoProperty] = Field(default=None, description="See clause 4.7. ", alias="observationSpace")
-    operation_space: Optional[GeoProperty] = Field(default=None, description="See clause 4.7. ", alias="operationSpace")
-    system_generated_attrs: Optional[SystemGeneratedAttributes] = Field(default=None, alias="systemGeneratedAttrs")
+    location: Optional[GeoProperty] = None
+    observation_space: Optional[GeoProperty] = Field(default=None, alias="observationSpace")
+    operation_space: Optional[GeoProperty] = Field(default=None, alias="operationSpace")
+    created_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was entered into an NGSI-LD system.  Entity creation timestamp. See clause 4.8. ", alias="createdAt")
+    modified_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was last modified in an NGSI-LD system, e.g. in order to correct a previously entered incorrect value.  Entity last modification timestamp. See clause 4.8. ", alias="modifiedAt")
+    deleted_at: Optional[datetime] = Field(default=None, description="It is defined as the temporal Property at which the Entity, Property or Relationship was deleted from an NGSI-LD system.  Entity deletion timestamp. See clause 4.8. It is only used in notifications reporting deletions and in the Temporal Representation of Entities (clause 4.5.6), Properties (clause 4.5.7), Relationships (clause 4.5.8) and LanguageProperties (clause 5.2.32). ", alias="deletedAt")
     name: Optional[IotName] = None
     description: IotDescription
     has_temperature_sensor: Optional[HasTemperatureSensor] = Field(default=None, alias="hasTemperatureSensor")
     has_humidity_sensor: Optional[HasHumiditySensor] = Field(default=None, alias="hasHumiditySensor")
     additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["id", "type", "scope", "location", "observationSpace", "operationSpace", "systemGeneratedAttrs", "name", "description", "hasTemperatureSensor", "hasHumiditySensor"]
+    __properties: ClassVar[List[str]] = ["id", "type", "scope", "location", "observationSpace", "operationSpace", "createdAt", "modifiedAt", "deletedAt", "name", "description", "hasTemperatureSensor", "hasHumiditySensor"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
@@ -107,9 +109,6 @@ class IotDevice(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of operation_space
         if self.operation_space:
             _dict['operationSpace'] = self.operation_space.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of system_generated_attrs
-        if self.system_generated_attrs:
-            _dict['systemGeneratedAttrs'] = self.system_generated_attrs.to_dict()
         # override the default output from pydantic by calling `to_dict()` of name
         if self.name:
             _dict['name'] = self.name.to_dict()
@@ -145,7 +144,9 @@ class IotDevice(BaseModel):
             "location": GeoProperty.from_dict(obj["location"]) if obj.get("location") is not None else None,
             "observationSpace": GeoProperty.from_dict(obj["observationSpace"]) if obj.get("observationSpace") is not None else None,
             "operationSpace": GeoProperty.from_dict(obj["operationSpace"]) if obj.get("operationSpace") is not None else None,
-            "systemGeneratedAttrs": SystemGeneratedAttributes.from_dict(obj["systemGeneratedAttrs"]) if obj.get("systemGeneratedAttrs") is not None else None,
+            "createdAt": obj.get("createdAt"),
+            "modifiedAt": obj.get("modifiedAt"),
+            "deletedAt": obj.get("deletedAt"),
             "name": IotName.from_dict(obj["name"]) if obj.get("name") is not None else None,
             "description": IotDescription.from_dict(obj["description"]) if obj.get("description") is not None else None,
             "hasTemperatureSensor": HasTemperatureSensor.from_dict(obj["hasTemperatureSensor"]) if obj.get("hasTemperatureSensor") is not None else None,
