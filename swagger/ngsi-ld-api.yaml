@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: NGSI-LD OAS
-  version: 1.7.1
+  version: 1.8.1
   description: OpenAPI Specification for NGSI-LD API.
   contact:
     url: https://www.etsi.org/committee/cim
@@ -10,8 +10,8 @@ info:
     url: https://forge.etsi.org/legal-matters
 
 externalDocs:
-  description: ETSI GS CIM 009 V1.7.1 cross-cutting Context Information Management (CIM); NGSI-LD API
-  url: https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.07.01_60/gs_CIM009v010701p.pdf
+  description: ETSI GS CIM 009 V1.8.1 Context Information Management (CIM); NGSI-LD API
+  url: https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.08.01_60/gs_CIM009v010801p.pdf
 
 servers:
   - url: '{protocol}://{hostname}:{port}/ngsi-ld/v1'
@@ -44,6 +44,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: |
           Payload body in the request contains a JSON-LD object which represents the entity that is to be created.
@@ -78,11 +79,6 @@ paths:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
         '207':
-          headers:
-            Location:
-              $ref: '#/components/headers/Location'
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
           $ref: '#/components/responses/MultiStatus.BatchOperationResult'
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -106,6 +102,8 @@ paths:
         - $ref: '#/components/parameters/Query.type'
         - $ref: '#/components/parameters/Query.idPattern'
         - $ref: '#/components/parameters/Query.attrs'
+        - $ref: '#/components/parameters/Query.pick'
+        - $ref: '#/components/parameters/Query.omit'
         - $ref: '#/components/parameters/Query.q'
         - $ref: '#/components/parameters/Query.csf'
         - $ref: '#/components/parameters/Query.geometry'
@@ -115,14 +113,21 @@ paths:
         - $ref: '#/components/parameters/Query.geometryProperty'
         - $ref: '#/components/parameters/Query.lang'
         - $ref: '#/components/parameters/Query.scopeQ'
+        - $ref: '#/components/parameters/Query.containedBy'
+        - $ref: '#/components/parameters/Query.join'
+        - $ref: '#/components/parameters/Query.joinLevel'
+        - $ref: '#/components/parameters/Query.datasetId'
+        - $ref: '#/components/parameters/Query.entityMap'
         - $ref: '#/components/parameters/Query.limit'
         - $ref: '#/components/parameters/Query.count'
         - $ref: '#/components/parameters/Query.options.entities'
+        - $ref: '#/components/parameters/Query.format.entities'
         # Local Query param
         - $ref: '#/components/parameters/Query.local'
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '200':
           description: |
@@ -131,7 +136,12 @@ paths:
 
             If the Accept Header indicates that the Entities are to be rendered as GeoJSON, a response body
             containing the query result as GeoJSON FeatureCollection is returned.
+
+            If an EntityMap has been requested, the HTTP response shall include an "NGSILDEntityMap" HTTP 
+            header that contains the resource URI of the EntityMap resource used in the operation.
           headers:
+            #NGSILD-EntityMap:
+            #  $ref: '#/components/headers/NGSILD-EntityMap'
             NGSILD-Results-Count:
               $ref: '#/components/headers/NGSILD-Results-Count'
             NGSILD-Tenant:
@@ -166,18 +176,8 @@ paths:
               schema:
                   $ref: '#/components/schemas/FeatureCollection'
         '400':
-          headers:
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
-            NGSILD-Warning:
-              $ref: '#/components/headers/NGSILD-Warning'
           $ref: '#/components/responses/BadRequest'
         '501':
-          headers:
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
-            NGSILD-Warning:
-              $ref: '#/components/headers/NGSILD-Warning'
           $ref: '#/components/responses/NotImplemented'
 
   /entities/{entityId}:
@@ -197,14 +197,23 @@ paths:
         # Query params
         - $ref: '#/components/parameters/Query.type'
         - $ref: '#/components/parameters/Query.attrs'
+        - $ref: '#/components/parameters/Query.pick'
+        - $ref: '#/components/parameters/Query.omit'
         - $ref: '#/components/parameters/Query.geometryProperty'
         - $ref: '#/components/parameters/Query.lang'
+        - $ref: '#/components/parameters/Query.containedBy'
+        - $ref: '#/components/parameters/Query.join'
+        - $ref: '#/components/parameters/Query.joinLevel'
+        - $ref: '#/components/parameters/Query.datasetId'
+        - $ref: '#/components/parameters/Query.entityMap'
         - $ref: '#/components/parameters/Query.options.entities'
+        - $ref: '#/components/parameters/Query.format.entities'
         # Local Query param
         - $ref: '#/components/parameters/Query.local'
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '200':
           description: |
@@ -212,7 +221,12 @@ paths:
             Attributes, unless the Accept Header indicates that the Entity is to be rendered as GeoJSON.
 
             If the Accept Header indicates that the Entity is to be rendered as GeoJSON, a GeoJSON Feature is returned.
+            
+            If an EntityMap has been requested, the HTTP response shall include an "NGSILDEntityMap" HTTP header that 
+            contains the resource URI of the EntityMap resource used in the operation.
           headers:
+            NGSILD-EntityMap:
+              $ref: '#/components/headers/NGSILD-EntityMap'
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
             NGSILD-Warning:
@@ -241,25 +255,10 @@ paths:
               schema:
                   $ref: '#/components/schemas/Feature'
         '400':
-          headers:
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
-            NGSILD-Warning:
-              $ref: '#/components/headers/NGSILD-Warning'
           $ref: '#/components/responses/BadRequest'
         '404':
-          headers:
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
-            NGSILD-Warning:
-              $ref: '#/components/headers/NGSILD-Warning'
           $ref: '#/components/responses/NotFound'
         '501':
-          headers:
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
-            NGSILD-Warning:
-              $ref: '#/components/headers/NGSILD-Warning'
           $ref: '#/components/responses/NotImplemented'
     delete:
       tags:
@@ -281,6 +280,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '204':
           description: |
@@ -289,19 +289,10 @@ paths:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
         '207':
-          headers:
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
           $ref: '#/components/responses/MultiStatus.BatchOperationResult'
         '400':
-          headers:
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
           $ref: '#/components/responses/BadRequest'
         '404':
-          headers:
-            NGSILD-Tenant:
-              $ref: '#/components/headers/NGSILD-Tenant'
           $ref: '#/components/responses/NotFound'
     patch:
       tags:
@@ -328,6 +319,7 @@ paths:
             items:
               $ref: '#/components/schemas/options.representation'
           required: false
+        - $ref: '#/components/parameters/Query.format.entities'
         - $ref: '#/components/parameters/Query.type'
         - $ref: '#/components/parameters/Query.observedAt'
         - $ref: '#/components/parameters/Query.lang'
@@ -336,6 +328,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: |
           Entity Fragment containing a complete representation of the Attributes to be merged.
@@ -387,6 +380,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: |
           Entity Fragment containing a complete representation of the Entity to be replaced.
@@ -441,6 +435,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: |
           Entity Fragment containing a complete representation of the Attributes to be added.
@@ -492,6 +487,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: |
           Entity Fragment containing a complete representation of the Attributes to be updated.
@@ -545,6 +541,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: Attribute Fragment containing the elements of the attribute to be updated.
         $ref: '#/components/requestBodies/AttributeFragment'
@@ -585,6 +582,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '204':
           description: |
@@ -619,6 +617,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: Attribute Fragment replacing the previous data.
         $ref: '#/components/requestBodies/AttributeFragment'
@@ -647,8 +646,6 @@ paths:
         This operation allows registering a context source within an NGSI-LD system.
       operationId: createCSR
       parameters:
-        # Local Query param
-        - $ref: '#/components/parameters/Query.local'
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
@@ -738,8 +735,6 @@ paths:
         - $ref: '#/components/parameters/Query.options.sysAttrs'
         - $ref: '#/components/parameters/Query.limit'
         - $ref: '#/components/parameters/Query.count'
-        # Local Query param
-        - $ref: '#/components/parameters/Query.local'
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
@@ -750,6 +745,8 @@ paths:
           headers:
             NGSILD-Results-Count:
               $ref: '#/components/headers/NGSILD-Results-Count'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -796,8 +793,6 @@ paths:
         - $ref: '#/components/parameters/Query.options.sysAttrs'
         # Path params
         - $ref: '#/components/parameters/Path.registrationId'
-        # Local Query param
-        - $ref: '#/components/parameters/Query.local'
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
@@ -805,6 +800,9 @@ paths:
         '200':
           description: |
             A response body containing the JSON-LD representation of the target subscription.
+          headers:
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -846,8 +844,6 @@ paths:
       parameters:
         # Path params
         - $ref: '#/components/parameters/Path.registrationId'
-        # Local Query param
-        - $ref: '#/components/parameters/Query.local'
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
@@ -893,8 +889,6 @@ paths:
       parameters:
         # Path params
         - $ref: '#/components/parameters/Path.registrationId'
-        # Local Query param
-        - $ref: '#/components/parameters/Query.local'
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
@@ -926,6 +920,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: |
           Payload body in the request contains a JSON-LD object which represents the subscription that is to be created.
@@ -964,6 +959,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '200':
           description: |
@@ -973,6 +969,8 @@ paths:
               $ref: '#/components/headers/NGSILD-Tenant'
             NGSILD-Results-Count:
               $ref: '#/components/headers/NGSILD-Results-Count'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -1022,6 +1020,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '200':
           description: |
@@ -1029,6 +1028,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -1073,6 +1074,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: |
           Subscription Fragment including id, type and any other subscription field to be changed.
@@ -1106,6 +1108,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '204':
           description: |
@@ -1129,11 +1132,10 @@ paths:
         This operation allows creating a new Context Source Registration Subscription.
       operationId: createCSRSubscription
       parameters:
-        # Local Query param
-        - $ref: '#/components/parameters/Query.local'
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: |
           Payload body in the request contains a JSON-LD object which represents
@@ -1168,11 +1170,10 @@ paths:
         - $ref: '#/components/parameters/Query.options.sysAttrs'
         - $ref: '#/components/parameters/Query.limit'
         - $ref: '#/components/parameters/Query.count'
-        # Local Query param
-        - $ref: '#/components/parameters/Query.local'
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '200':
           description: |
@@ -1182,6 +1183,8 @@ paths:
               $ref: '#/components/headers/NGSILD-Tenant'
             NGSILD-Results-Count:
               $ref: '#/components/headers/NGSILD-Results-Count'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -1226,11 +1229,10 @@ paths:
         - $ref: '#/components/parameters/Query.options.sysAttrs'
         # Path params
         - $ref: '#/components/parameters/Path.subscriptionId'
-        # Local Query param
-        - $ref: '#/components/parameters/Query.local'
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '200':
           description: |
@@ -1239,6 +1241,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -1278,11 +1282,10 @@ paths:
       parameters:
         # Path params
         - $ref: '#/components/parameters/Path.subscriptionId'
-        # Local Query param
-        - $ref: '#/components/parameters/Query.local'
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: |
           Subscription Fragment including id, type and any other context
@@ -1312,11 +1315,10 @@ paths:
       parameters:
         # Path params
         - $ref: '#/components/parameters/Path.subscriptionId'
-        # Local Query param
-        - $ref: '#/components/parameters/Query.local'
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '204':
           description: |
@@ -1345,6 +1347,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: |
           Array of entities to be created.
@@ -1427,6 +1430,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: |
           Array of entities to be created.
@@ -1516,6 +1520,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: |
           Array of entities to be updated.
@@ -1600,6 +1605,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: |
           Array of String (URIs representing Entity IDs) to be deleted.
@@ -1666,6 +1672,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: Payload body in the request contains a JSON-LD object which represents the query to be performed.
         content:
@@ -1689,6 +1696,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -1737,6 +1746,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: |
           Array of Entities to be merged.
@@ -1809,6 +1819,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: |
           Payload body in the request contains a JSON-LD object which represents the
@@ -1844,6 +1855,8 @@ paths:
 
         This operation allows querying the temporal evolution of Entities present in an NGSI-LD system.
         It is similar to the operation defined by clause 5.7.2 (Query Entities) with the addition of a temporal query.
+      
+        *The query parameters timerel and timeAt are required.
       operationId: queryTemporal
       parameters:
         # Query params
@@ -1851,6 +1864,8 @@ paths:
         - $ref: '#/components/parameters/Query.type'
         - $ref: '#/components/parameters/Query.idPattern'
         - $ref: '#/components/parameters/Query.attrs'
+        - $ref: '#/components/parameters/Query.pick'
+        - $ref: '#/components/parameters/Query.omit'
         - $ref: '#/components/parameters/Query.q'
         - $ref: '#/components/parameters/Query.csf'
         - $ref: '#/components/parameters/Query.geometry'
@@ -1859,24 +1874,25 @@ paths:
         - $ref: '#/components/parameters/Query.geoproperty'
         - $ref: '#/components/parameters/Query.timeproperty'
         - $ref: '#/components/parameters/Query.timerel'
-          required: true
         - $ref: '#/components/parameters/Query.timeAt'
-          required: true
         - $ref: '#/components/parameters/Query.endTimeAt'
         - $ref: '#/components/parameters/Query.lastN'
         - $ref: '#/components/parameters/Query.lang'
         - $ref: '#/components/parameters/Query.aggrMethods'
         - $ref: '#/components/parameters/Query.aggrPeriodDuration'
         - $ref: '#/components/parameters/Query.scopeQ'
+        - $ref: '#/components/parameters/Query.datasetId'
         - $ref: '#/components/parameters/Query.limit'
         - $ref: '#/components/parameters/Query.count'
         - $ref: '#/components/parameters/Query.options.temporal'
+        - $ref: '#/components/parameters/Query.format.temporal'
         - $ref: '#/components/parameters/Query.options.sysAttrs'
         # Local Query param
         - $ref: '#/components/parameters/Query.local'
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '200':
           description: |
@@ -1886,6 +1902,8 @@ paths:
               $ref: '#/components/headers/NGSILD-Tenant'
             NGSILD-Results-Count:
               $ref: '#/components/headers/NGSILD-Results-Count'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -1928,6 +1946,8 @@ paths:
         - $ref: '#/components/parameters/Path.entityId'
         # Query params
         - $ref: '#/components/parameters/Query.attrs'
+        - $ref: '#/components/parameters/Query.pick'
+        - $ref: '#/components/parameters/Query.omit'
         - $ref: '#/components/parameters/Query.timeproperty'
         - $ref: '#/components/parameters/Query.timerel'
         - $ref: '#/components/parameters/Query.timeAt'
@@ -1936,13 +1956,16 @@ paths:
         - $ref: '#/components/parameters/Query.lang'
         - $ref: '#/components/parameters/Query.aggrMethods'
         - $ref: '#/components/parameters/Query.aggrPeriodDuration'
+        - $ref: '#/components/parameters/Query.datasetId'
         - $ref: '#/components/parameters/Query.options.temporal'
+        - $ref: '#/components/parameters/Query.format.temporal'
         - $ref: '#/components/parameters/Query.options.sysAttrs'
         # Local Query param
         - $ref: '#/components/parameters/Query.local'
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '200':
           description: |
@@ -1951,6 +1974,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -1993,6 +2018,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '204':
           description: |
@@ -2023,6 +2049,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: |
           EntityTemporal Fragment containing a complete representation of the Attribute instances to be added.
@@ -2062,6 +2089,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '204':
           description: |
@@ -2098,6 +2126,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: EntityTemporal Fragment containing a complete representation of the Attribute instance to be replaced.
         $ref: '#/components/requestBodies/EntityTemporalFragment'
@@ -2136,6 +2165,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '204':
           description: |
@@ -2165,6 +2195,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       requestBody:
         description: Payload body in the request contains a JSON-LD object which represents the query to be performed.
         $ref: '#/components/requestBodies/QueryTemporal'
@@ -2175,6 +2206,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -2235,6 +2268,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '200':
           description: |
@@ -2246,6 +2280,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -2301,6 +2337,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '200':
           description: |
@@ -2309,6 +2346,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -2361,6 +2400,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '200':
           description: |
@@ -2372,6 +2412,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -2426,6 +2468,7 @@ paths:
         # Request headers
         - $ref: '#/components/parameters/Headers.Link'
         - $ref: '#/components/parameters/Headers.ngsildTenant'
+        - $ref: '#/components/parameters/Headers.via'
       responses:
         '200':
           description: |
@@ -2434,6 +2477,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -2532,6 +2577,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -2585,6 +2632,8 @@ paths:
           headers:
             NGSILD-Tenant:
               $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
           content:
             application/json:
               schema:
@@ -2653,10 +2702,176 @@ paths:
             @context identifier not known to the
             system, see clause 6.3.2. 
           $ref: '#/components/responses/NotFound'
-        '503':
+        '504':
           description: |
             It is used when re-downloading fails.
-          $ref: '#/components/responses/ServiceUnavailable' 
+          $ref: '#/components/responses/GatewayTimeout' 
+
+  /entityMap/{entityMapId}:
+    get:
+      tags:
+        - Entity Map Operations
+      summary: |
+        EntityMap Retrieval by id 
+      description:  |
+        5.14.1 Retrieve EntityMap.
+
+        With this operation a client can obtain a cached EntityMap which is currently stored in the broker's internal storage, or memory.
+      operationId: retrieveEntityMap
+      parameters:
+        # Path params
+        - $ref: '#/components/parameters/Path.entityMapId'
+        # Request headers
+        - $ref: '#/components/parameters/Headers.Link'
+        - $ref: '#/components/parameters/Headers.ngsildTenant'
+      responses:
+        '200':
+          description: |
+            A response body containing the JSON-LD representation of the target entity.
+          headers:
+            NGSILD-Tenant:
+              $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/EntityMap'
+                  - required:
+                    - entityMap
+                    - linkedMaps
+            application/json+ld:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      '@context':
+                        $ref:  '#/components/schemas/LdContext'
+                  - $ref: '#/components/schemas/EntityMap'
+                  - required:
+                    - entityMap
+                    - linkedMaps
+                    - '@context'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags:
+        - Entity Map Operations
+      summary: |
+        EntityMap Update by id
+      description: |
+        5.14.2 Update EntityMap.
+
+        This operation allows performing a partial update on an NGSI-LD EntityMap. A partial update only changes the
+        elements provided in the EntityMap, leaving the rest as they are.
+      operationId: updateEntityMap
+      parameters:
+        # Path params
+        - $ref: '#/components/parameters/Path.entityMapId'
+        # Request headers
+        - $ref: '#/components/parameters/Headers.Link'
+        - $ref: '#/components/parameters/Headers.ngsildTenant'
+      requestBody:
+        description: |
+          Payload body in the request contains a JSON-LD object which represents the context source registration that is to be updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityMap'
+          application/json+ld:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    '@context':
+                      $ref:  '#/components/schemas/LdContext'
+                - $ref: '#/components/schemas/EntityMap'
+                - required:
+                  - '@context'
+      responses:
+        '204':
+          description: |
+            The EntityMap was updated successfully.
+          headers:
+            NGSILD-Tenant:
+              $ref: '#/components/headers/NGSILD-Tenant'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+        - Entity Map Operations
+      summary: |
+        EntityMap Deletion by id 
+      description: |
+        5.14.3 Delete EntityMap.
+
+        This operation allows deleting an NGSI-LD EntityMap.
+      operationId: deleteEntityMap
+      parameters:
+        # Path params
+        - $ref: '#/components/parameters/Path.entityMapId'
+        # Request headers
+        - $ref: '#/components/parameters/Headers.Link'
+        - $ref: '#/components/parameters/Headers.ngsildTenant'
+      responses:
+        '204':
+          description: |
+            No Content.
+          headers:
+            NGSILD-Tenant:
+              $ref: '#/components/headers/NGSILD-Tenant'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /info/sourceIdentity:
+    get:
+      tags:
+        - Context Source Identity Information Operations
+      summary: |
+        Context Source Identity Retrieval 
+      description:  |
+        5.15.1 Retrieve Context Source Identity Information.
+
+        With this operation, a client can obtain Context Source identity information which uniquely defines the Context Source itself. 
+        In the multi-tenancy use case (see clause 4.14), a client can obtain identify information about a specific Tenant within a Context Source.
+      operationId: retrieveCSIdentityInfo
+      parameters:
+        # Request headers
+        - $ref: '#/components/parameters/Headers.Link'
+        - $ref: '#/components/parameters/Headers.ngsildTenant'
+      responses:
+        '200':
+          description: |
+            A response body containing the JSON-LD representation of the Context Source Identity Information.
+          headers:
+            NGSILD-Tenant:
+              $ref: '#/components/headers/NGSILD-Tenant'
+            NGSILD-Warning:
+              $ref: '#/components/headers/NGSILD-Warning'
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ContextSourceIdentity'
+            application/json+ld:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      '@context':
+                        $ref:  '#/components/schemas/LdContext'
+                  - $ref: '#/components/schemas/ContextSourceIdentity'
+                  - required:
+                      - '@context'
+        '501':
+          $ref: '#/components/responses/NotImplemented'
 
 components:
   headers:
@@ -2665,6 +2880,13 @@ components:
         Contains the resource URI of the created entity resource.
       schema:
         type: string
+    NGSILD-EntityMap:
+      description: |
+        If present, the EntityMap supplied is used for determining the set of Entities requested during the query operation. 
+        The location of the EntityMap used in the query/retrieval operation is returned in the response.
+      schema:
+        type: string
+        format: uri
     NGSILD-Results-Count:
       description: |
         6.3.13 Counting number of results. The total number of matching results (e.g. number of Entities) is returned.
@@ -2713,6 +2935,21 @@ components:
       explode: true
       schema:
         type: string
+    Headers.via:
+      name: Via
+      in: header
+      description: |
+        6.3.18 Limiting Distributed Operations
+
+        If present, the listing of previously encountered Context Sources supplied is used when determining 
+        matching registrations. HTTP Via Header (IETF RFC 7230).
+
+        Any Context Broker implementation passing a distributed operation request onward to another Context Source 
+        shall send an additional field value on the Via header field using its own unique Context Source "hostAlias" 
+        (see clause 5.2.40) as the pseudonym.
+      explode: true
+      schema:
+        type: string
     Path.attrId:
       name: attrId
       in: path
@@ -2735,7 +2972,14 @@ components:
     Path.entityId:
       name: entityId
       in: path
-      description: Id (URI) of the entity to be retrieved.
+      description: Id (URI) of the Entity to be retrieved, updated or deleted.
+      schema:
+        $ref: '#/components/schemas/Path'
+      required: true
+    Path.entityMapId:
+      name: entityMapId
+      in: path
+      description: Id (URI) of the EntityMap to be retrieved, updated or deleted.
       schema:
         $ref: '#/components/schemas/Path'
       required: true
@@ -2814,6 +3058,23 @@ components:
         List of Attributes to be matched by the Entity and included in the response. If the Entity does not
         have any of the Attributes in attrs, then a 404 Not Found shall be retrieved. If attrs is not
         specified, no matching is performed and all Attributes related to the Entity shall be retrieved.
+
+        A synonym for a combination of the pick and q parameters. DEPRECATED.
+        Each String is an Attribute (Property or Relationship) name.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      required: false
+      deprecated: true
+    Query.containedBy:
+      name: containedBy
+      in: query
+      description: |
+       List of entity ids which have previously been encountered whilst retrieving the 
+       Entity Graph. Only applicable if joinLevel is present.
       style: form
       explode: false
       schema:
@@ -2862,12 +3123,18 @@ components:
       name: datasetId
       in: query
       description: |
-        Specifies the datasetId of the dataset to be deleted.
+        Specifies the datasetIds of the Attribute instances to be selected for each matched Attribute as per clause 4.5.5, 
+        or the datasetId of the dataset to be deleted.
       style: form
       explode: true
       schema:
-        type: string
-        format: uri
+        oneOf:
+          - type: string
+            format: uri
+          - type: array
+            items: 
+              type: string
+              format: uri
       required: false
     Query.details:
       name: details
@@ -2901,6 +3168,30 @@ components:
       schema:
         type: string
         format: date-time
+      required: false
+    Query.entityMap:
+      name: details
+      in: query
+      description: If true, the location of the EntityMap used in the operation is returned in the response.
+      style: form
+      explode: true
+      schema:
+        type: boolean
+      required: false
+    Query.format.entities:
+      name: format
+      in: query
+      style: form
+      explode: false
+      schema:
+        $ref: '#/components/schemas/format.representation'
+    Query.format.temporal:
+      name: format
+      in: query
+      style: form
+      explode: false
+      schema:
+        $ref: '#/components/schemas/format.temporal'
       required: false
     Query.id:
       name: id
@@ -2993,6 +3284,26 @@ components:
           - type: string
             pattern: ^near;((maxDistance==\\d+)|(minDistance==\\d+))$ 
       required: false
+    Query.join:
+      name: join
+      in: query
+      description: |
+        The type of Linked Entity retrieval to apply (see clause 4.5.23). Allowed values: "flat", "inline", "@none".
+      style: form
+      explode: true
+      schema:
+        type: string
+      required: false
+    Query.joinLevel:
+      name: joinLevel
+      in: query
+      description: |
+        Depth of Linked Entity retrieval to apply. Only applicable if join parameter is present.
+      style: form
+      explode: true
+      schema:
+        type: integer
+      required: false
     Query.kind:
       name: kind
       in: query
@@ -3047,6 +3358,9 @@ components:
       description: |
         6.3.18 Limiting Distributed Operations. If local=true then no Context Source Registrations shall be
         considered as matching to avoid cascading distributed operations (see clause 4.3.6.4).
+
+        The parameter described in this clause limits the execution of an operation to a local Context Source 
+        or Context Broker (clause 5.5.13).
       style: form
       explode: true
       schema:
@@ -3062,6 +3376,19 @@ components:
       schema:
         type: string
         format: date-time
+      required: false
+    Query.omit:
+      name: omit
+      in: query
+      description: |
+        Each String is an Entity member ("id", "type", "scope" or a projected Attribute name). 
+        When defined, the listed Entity members are removed from each Entity within the payload.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
       required: false
     Query.options.entities:
       name: options
@@ -3083,7 +3410,7 @@ components:
       schema:
         type: array
         items:
-            $ref: '#/components/schemas/options.noOverwrite'
+          $ref: '#/components/schemas/options.noOverwrite'
       required: false
     Query.options.sysAttrs:
       name: options
@@ -3114,6 +3441,20 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/options.upsert'
+      required: false
+    Query.pick:
+      name: pick
+      in: query
+      description: |
+        Each String is an Entity member ("id", "type", "scope" or a projected Attribute name).
+        When defined, every Entity within the payload body is reduced down to only contain 
+        the listed Entity members.
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
       required: false
     Query.q:
       name: q
@@ -3192,7 +3533,8 @@ components:
       name: type
       in: query
       description: |
-        Selection of Entity Types as per clause 4.17.
+        Selection of Entity Types as per clause 4.17. "*" is also allowed as a value and local is 
+        implicitly set to true and shall not be explicitly set to false.
       style: form
       explode: true
       schema:
@@ -3208,6 +3550,10 @@ components:
               - $ref: '#/components/schemas/Relationship'
               - $ref: '#/components/schemas/GeoProperty'
               - $ref: '#/components/schemas/LanguageProperty'
+              - $ref: '#/components/schemas/VocabProperty'
+              - $ref: '#/components/schemas/JsonProperty'
+              - $ref: '#/components/schemas/ListProperty'
+              - $ref: '#/components/schemas/ListRelationship'
         application/json+ld:
           schema:
             allOf:
@@ -3220,8 +3566,12 @@ components:
                 - $ref: '#/components/schemas/Relationship'
                 - $ref: '#/components/schemas/GeoProperty'
                 - $ref: '#/components/schemas/LanguageProperty'
+                - $ref: '#/components/schemas/VocabProperty'
+                - $ref: '#/components/schemas/JsonProperty'
+                - $ref: '#/components/schemas/ListProperty'
+                - $ref: '#/components/schemas/ListRelationship'
               - required:
-                  - '@context'
+                - '@context'
     EntityTemporal:
       content:
         application/json:
@@ -3324,6 +3674,8 @@ components:
     options.representation:
       description: |
         6.3.7 Representation of Entities. 
+
+        An alternative mechanism to include the format parameter. DEPRECATED.
         
         When its value includes the keyword "normalized", a normalized
         representation of Entities shall be provided as defined by clause 4.5.1, with Attributes returned
@@ -3345,6 +3697,7 @@ components:
         - concise
         - keyValues
         - simplified
+      deprecated: true
     options.sysAttrs:
       description: | 
         6.3.11 Including system generated attributes.
@@ -3360,6 +3713,9 @@ components:
       description: |
         6.3.12 Simplified or aggregated temporal representation of entities.
 
+        An alternative mechanism to include the format parameter. DEPRECATED.
+        If both format and options are present, the value of the format parameter shall take precedence.
+
         When its value includes the keyword "temporalValues", a simplified temporal representation of
         entities shall be provided as defined by clause 4.5.8.
 
@@ -3371,6 +3727,7 @@ components:
       enum:
         - temporalValues
         - aggregatedValues
+      deprecated: true
     options.upsert:
       description: |
         6.15.3 Upsert configuration.
@@ -3387,28 +3744,54 @@ components:
     # End of Options parameters
     ###
     ###
+    # Beginning of Format parameters
+    #
+    format.representation:
+      description: |
+        6.3.7 Representation of Entities. 
+        
+        When its value includes the keyword "normalized", a normalized
+        representation of Entities shall be provided as defined by clause 4.5.1, with Attributes returned
+        in the normalized representation as defined in clauses 4.5.2.2, 4.5.3.2 and 4.5.18.2.
+
+        When its value includes the keyword "concise", a concise lossless representation of Entities shall
+        be provided as defined by clause 4.5.1. with Attributes returned in the concise representation as
+        defined in clauses 4.5.2.3, 4.5.3.3 and 4.5.18.3. In this case the broker will return data in the
+        most concise lossless representation possible, for example removing all Attribute "type" members.
+
+        When its value includes the keyword "keyValues" (or "simplified" as a synonym), a simplified
+        representation of Entities shall be provided as defined by clause 4.5.4.
+
+        If the Accept Header is set to "application/geo+json" the response will be in simplified GeoJSON
+        format as defined by clause 4.5.17.
+      type: string
+      enum:
+        - normalized
+        - concise
+        - keyValues
+        - simplified
+    format.temporal:
+      description: |
+        6.3.12 Simplified or aggregated temporal representation of entities.
+
+        When its value includes the keyword "temporalValues", a simplified temporal representation of
+        entities shall be provided as defined by clause 4.5.8.
+
+        When its value includes the keyword "aggregatedValues", an aggregated temporal representation of
+        entities shall be provided as defined by clause 4.5.19.
+
+        Only one of the two keywords can be present in the values of the parameter.
+      type: string
+      enum:
+        - temporalValues
+        - aggregatedValues
+    #
+    # End of Format parameters
+    ###
+    ###
     #
     # Beginning of 4.8 Temporal Properties
     #
-    SystemGeneratedAttributes:
-      description: |
-        5.2.2 Common members. 
-        
-        For grouping the subschemas of system-generated temporal attributes: createdAt, modifiedAt, and deletedAt.
-      type: object
-      properties:
-        createdAt: 
-          allOf:
-            - $ref: '#/components/schemas/CreatedAt'
-          readOnly: true
-        modifiedAt:
-          allOf:
-            - $ref: '#/components/schemas/ModifiedAt'
-          readOnly: true
-        deletedAt:
-          allOf:
-            - $ref: '#/components/schemas/DeletedAt'
-          readOnly: true
     CreatedAt:
       description: |
         It is defined as the temporal Property at which the Entity, Property or
@@ -3642,6 +4025,13 @@ components:
             A name given to this Context Source Registration.
           type: string
           minLength: 1
+        contextSourceAlias:
+          description: |
+            A previously retrieved unique id for a registered Context Source which is used to 
+            identify loops. In the multi-tenancy use case (see clause 4.14), this id shall be 
+            used to identify a specific Tenant within a registered Context Source.
+          type: string
+          minLength: 1
         description:
           description: |
             A description of this Context Source Registration.
@@ -3655,6 +4045,16 @@ components:
           items:
             $ref: '#/components/schemas/RegistrationInfo'
           minItems: 1
+        datasetId:
+          description: |
+            Specifies the datasetIds of Attributes that the Context Source can provide, 
+            defined as per clause 4.5.5. Valid URIs, "@none" for including the default 
+            Attribute instances.
+          type: array
+          items:
+            type: string
+            format: uri
+            default: "@none"
         tenant:
           description: |
             Identifies the tenant that has to be specified in all requests to the Context Source that
@@ -3751,9 +4151,15 @@ components:
             to limit unnecessary distributed operation requests.
           $ref: '#/components/schemas/RegistrationManagementInfo'
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'        
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true      
         status:
           description: |
             Read-only. Status of the Registration. It shall be "ok" if the last attempt to perform a distributed
@@ -3892,19 +4298,21 @@ components:
             See clause 4.7.
           $ref: '#/components/schemas/GeoProperty'
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true
       additionalProperties:
         oneOf:
           - $ref: '#/components/schemas/Property'
           - type: array
             items:
               $ref: '#/components/schemas/Property'
-          - $ref: '#/components/schemas/Relationship'
-          - type: array
-            items:
-              $ref: '#/components/schemas/Relationship'
           - $ref: '#/components/schemas/GeoProperty'
           - type: array
             items:
@@ -3913,10 +4321,26 @@ components:
           - type: array
             items:
               $ref: '#/components/schemas/LanguageProperty'
-          - $ref: '#/components/schemas/VocabularyProperty'
+          - $ref: '#/components/schemas/VocabProperty'
           - type: array
             items:
-              $ref: '#/components/schemas/VocabularyProperty'
+              $ref: '#/components/schemas/VocabProperty'
+          - $ref: '#/components/schemas/JsonProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/JsonProperty'
+          - $ref: '#/components/schemas/ListProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListProperty'
+          - $ref: '#/components/schemas/Relationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/Relationship'
+          - $ref: '#/components/schemas/ListRelationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListRelationship'
     EntityInfo:
       description: |
         5.2.8 This type represents what Entities, Entity Types or group of Entity ids
@@ -3962,6 +4386,8 @@ components:
         type:
           description: |
             Selector of Entity Type(s).
+            If type is specified as "*", implying local scope, local scope shall not be explicitly set to be false 
+            (clause 5.5.13) for the execution of the corresponding operation.
           type: string
       required:
         - type
@@ -4008,17 +4434,20 @@ components:
             See clause 4.7.
           $ref: '#/components/schemas/GeoProperty'
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true
       additionalProperties:
         oneOf:
           - type: array
             items:
               $ref: '#/components/schemas/Property'
-          - type: array
-            items:
-              $ref: '#/components/schemas/Relationship'
           - type: array
             items:
               $ref: '#/components/schemas/GeoProperty'
@@ -4027,7 +4456,19 @@ components:
               $ref: '#/components/schemas/LanguageProperty'
           - type: array
             items:
-              $ref: '#/components/schemas/VocabularyProperty'
+              $ref: '#/components/schemas/VocabProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/JsonProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/Relationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListRelationship'
     EntityType:
       description: |
         5.2.25 This type represents the data needed to define the elements of the detailed
@@ -4204,10 +4645,6 @@ components:
           - type: array
             items:
               $ref: '#/components/schemas/Property'
-          - $ref: '#/components/schemas/Relationship'
-          - type: array
-            items:
-              $ref: '#/components/schemas/Relationship'
           - $ref: '#/components/schemas/GeoProperty'
           - type: array
             items:
@@ -4216,6 +4653,26 @@ components:
           - type: array
             items:
               $ref: '#/components/schemas/LanguageProperty'
+          - $ref: '#/components/schemas/VocabProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/VocabProperty'
+          - $ref: '#/components/schemas/JsonProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/JsonProperty'
+          - $ref: '#/components/schemas/ListProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListProperty'
+          - $ref: '#/components/schemas/Relationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/Relationship'
+          - $ref: '#/components/schemas/ListRelationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListRelationship'
       required:
         - type
     ######
@@ -4229,7 +4686,6 @@ components:
       maxItems: 3
       items:
         type: number
-      additionalProperties: false
     Geometry.positionArray:
       description: |
         An array of positions.
@@ -4351,13 +4807,20 @@ components:
           type: string
           format: uri
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true
         instanceId:
           description: |
-            A URI uniquely identifying a Property instance,
-            as mandated by (see clause 4.5.7). System generated.
+            A URI uniquely identifying a GeoProperty instance,
+            as mandated by clause 4.5.7. System generated.
+            Only used in temporal representation of GeoProperties.
           type: string
           format: uri
           readOnly: true
@@ -4373,10 +4836,34 @@ components:
           - type: array
             items:
               $ref: '#/components/schemas/Property'
+          - $ref: '#/components/schemas/GeoProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/GeoProperty'
+          - $ref: '#/components/schemas/LanguageProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/LanguageProperty'
+          - $ref: '#/components/schemas/VocabProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/VocabProperty'
+          - $ref: '#/components/schemas/JsonProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/JsonProperty'
+          - $ref: '#/components/schemas/ListProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListProperty'
           - $ref: '#/components/schemas/Relationship'
           - type: array
             items:
               $ref: '#/components/schemas/Relationship'
+          - $ref: '#/components/schemas/ListRelationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListRelationship'
     GeoQuery:
       description: |
         5.2.13 This datatype represents a geoquery used for Subscriptions.
@@ -4452,19 +4939,26 @@ components:
           type: string
           format: uri
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true
         instanceId:
           description: |
-            A URI uniquely identifying a Property instance,
-            as mandated by (see clause 4.5.7). System generated.
+            A URI uniquely identifying a LanguageProperty instance,
+            as mandated by clause 4.5.7. System generated.
+            Only used in temporal representation of LanguageProperties.
           type: string
           format: uri
           readOnly: true
         previousLanguageMap:
           description: |
-            Previous Language Property languageMap. Only used in notifications, if the showChanges 
+            Previous LanguageProperty's languageMap. Only used in notifications, if the showChanges 
             option is explicitly requested.
           type: object
           readOnly: true
@@ -4474,10 +4968,34 @@ components:
           - type: array
             items:
               $ref: '#/components/schemas/Property'
+          - $ref: '#/components/schemas/GeoProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/GeoProperty'
+          - $ref: '#/components/schemas/LanguageProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/LanguageProperty'
+          - $ref: '#/components/schemas/VocabProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/VocabProperty'
+          - $ref: '#/components/schemas/JsonProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/JsonProperty'
+          - $ref: '#/components/schemas/ListProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListProperty'
           - $ref: '#/components/schemas/Relationship'
           - type: array
             items:
               $ref: '#/components/schemas/Relationship'
+          - $ref: '#/components/schemas/ListRelationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListRelationship'
     LdContext:
       description: |
         5.2.3 JSON-LD @context
@@ -4611,10 +5129,13 @@ components:
           description: |
             Entity Attribute Names (Properties or Relationships) to be included in the notification payload body.
             If undefined it will mean all Attributes.
+
+            A synonym for a combination of the pick and q parameter. DEPRECATED.
           type: array
           items:
             type: string
           minItems: 1
+          deprecated: true
         sysAttrs:
           description: |
             If true, the system generated attributes createdAt and modifiedAt are included in
@@ -4630,6 +5151,25 @@ components:
             - normalized
             - concise
             - keyValues
+        pick:
+          description: |
+            When defined, every Entity within payload body is reduced down to only contain 
+            the specified Entity members.
+            Entity member ("id", "type", "scope" or a projected Attribute name) as a valid 
+            attribute projection language string as per clause 4.21).
+          type: array
+          items:
+            type: string
+          minItems: 1
+        omit:
+          description: |
+            When defined, the specified Entity members are removed from each Entity within 
+            the payload. Entity member ("id", "type", "scope" or a projected Attribute name) 
+            as a valid attribute projection language string as per clause 4.21).
+          type: array
+          items:
+            type: string
+          minItems: 1
         showChanges:
           description: |
             If true the previous value (previousValue) of Properties or languageMap (previousLanguageMap) of
@@ -4638,6 +5178,21 @@ components:
              but not in the case of creations. showChanges cannot be true in case format is "keyValues".
           type: boolean
           default: false
+        join:
+          description: |
+            String representing the type of Linked Entity retrieval to apply.
+          type: string
+          enum:
+            - "flat"
+            - "inline"
+            - "@none"
+          default: "@none"
+        joinLevel:
+          description: |
+            Depth of Linked Entity retrieval to apply. Only applicable if join parameter is "flat" or "inline".
+          type: number
+          minimum: 1
+          default: 1
         endpoint:
           description: |
             Notification endpoint details.
@@ -4650,24 +5205,28 @@ components:
           enum:
             - ok
             - failed
+          readOnly: true
         timesSent:
           description: |
             Number of times that the notification has been sent. Provided by the system when
             querying the details of a subscription.
           type: number
           minimum: 1
+          readOnly: true
         timesFailed:
           description: |
             Number of times an unsuccessful response (or timeout) has been received when deliverying the notification.
             Provided by the system when querying the details of a subscription.
           type: number
           minimum: 1
+          readOnly: true
         lastNotification:
           description: |
             Timestamp corresponding to the instant when the last notification has been sent.
             Provided by the system when querying the details of a subscription.
           type: string
           format: date-time
+          readOnly: true
         lastFailure:
           description: |
             Timestamp corresponding to the instant when the last notification resulting in failure
@@ -4675,12 +5234,14 @@ components:
             Provided by the system when querying the details of a subscription.
           type: string
           format: date-time
+          readOnly: true
         lastSuccess:
           description: |
             Timestamp corresponding to the instant when the last successful (200 OK response) notification
             has been sent. Provided by the system when querying the details of a subscription.
           type: string
           format: date-time
+          readOnly: true
       required:
         - endpoint
     Path:
@@ -4739,6 +5300,13 @@ components:
           description: |
             A human-readable explanation specific to this occurrence of the
             problem.
+            
+            *InvalidRequest: The request associated to the operation is 
+            syntactically invalid or includes wrong content. If an HTTP request 
+            for an operation contains parameters that are incompatible with the 
+            operation, or it contains values of the "options" parameter that are 
+            not supported by the operation, an HTTP error response of type 
+            InvalidRequest should be returned.  
           type: string
         instance:
           description: |
@@ -4781,13 +5349,20 @@ components:
           type: string
           format: uri
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true
         instanceId:
           description: |
-            A URI uniquely identifying a Property instance,
-            as mandated by (see clause 4.5.7). System generated.
+            A URI uniquely identifying a Property instance as 
+            mandated by clause 4.5.7. System generated.
+            Only used in temporal representation of Properties.
           type: string
           format: uri
           readOnly: true
@@ -4795,10 +5370,9 @@ components:
           description: |
             Previous Property value. Only used in notifications, if the showChanges 
             option is explicitly requested.
-          allOf:
-            - oneOf:
-              - $ref: '#/components/schemas/DateTimeValue'
-              - $ref: '#/components/schemas/AnyValue'
+          oneOf:
+            - $ref: '#/components/schemas/DateTimeValue'
+            - $ref: '#/components/schemas/AnyValue'
           readOnly: true
       additionalProperties:
         oneOf:
@@ -4806,10 +5380,34 @@ components:
           - type: array
             items:
               $ref: '#/components/schemas/Property'
+          - $ref: '#/components/schemas/GeoProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/GeoProperty'
+          - $ref: '#/components/schemas/LanguageProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/LanguageProperty'
+          - $ref: '#/components/schemas/VocabProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/VocabProperty'
+          - $ref: '#/components/schemas/JsonProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/JsonProperty'
+          - $ref: '#/components/schemas/ListProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListProperty'
           - $ref: '#/components/schemas/Relationship'
           - type: array
             items:
               $ref: '#/components/schemas/Relationship'
+          - $ref: '#/components/schemas/ListRelationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListRelationship'
     Query:
       description: |
         5.2.23 This datatype represents the information that is required in order to convey
@@ -4833,6 +5431,27 @@ components:
           description: |
             List of Attributes that shall be matched by Entities in order to be retrieved.
             If not present all Attributes will be retrieved.
+            A synonym for a combination of the pick and q parameter. DEPRECATED.
+          type: array
+          items:
+            type: string
+          minItems: 1
+          deprecated: true
+        pick:
+          description: |
+            When defined, every Entity within payload body is reduced down to only contain 
+            the specified Entity members.
+            Entity member ("id", "type", "scope" or a projected Attribute name) as a valid 
+            attribute projection language string as per clause 4.21).
+          type: array
+          items:
+            type: string
+          minItems: 1
+        omit:
+          description: |
+            When defined, the specified Entity members are removed from each Entity within 
+            the payload. Entity member ("id", "type", "scope" or a projected Attribute name) 
+            as a valid attribute projection language string as per clause 4.21).
           type: array
           items:
             type: string
@@ -4860,6 +5479,31 @@ components:
         lang:
           description: Language filter to be applied to the query (clause 4.15).
           type: string
+        containedBy:
+          description: |
+            List of entity ids which have previously been encountered whilst retrieving the Entity Graph. 
+            Only applicable if joinLevel is present. 
+            Only applicable for the "Query Entities" operation (clause 5.7.2).
+          type: array
+          items:
+            type: string
+            format: uri
+          minItems: 1
+        datasetId:
+          description: |
+            Specifies the datasetIds of the Attribute instances to be selected for each 
+            matched Attribute as per clause 4.5.5. Valid URIs, "@none" for including the 
+            default Attribute instances.
+          type: array
+          items:
+            type: string
+            format: uri
+            default: "@none"
+        entityMap:
+          description: |
+            If true, the location of the EntityMap used in the operation is returned in the response. 
+            Only applicable for the "Query Entities" operation (clause 5.7.2).
+          type: boolean
       required:
         - type
     Query.temporal:
@@ -4948,8 +5592,22 @@ components:
         object:
           description: |
             Relationship's target object.
-          type: string
-          format: uri
+          oneOf:
+            - type: string
+              format: uri
+            - type: array
+              items:
+                type: string
+                format: uri
+        objectType:
+          description: |
+            Node Type of the Relationship's target object. 
+            Both short hand string(s) (type name) or URI(s) are allowed.
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
         observedAt:
           description: |
             Timestamp. See clause 4.8.
@@ -4960,13 +5618,20 @@ components:
           type: string
           format: uri
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'          
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true   
         instanceId:
           description: |
             A URI uniquely identifying a Relationship instance
-            (see clause 4.5.8). System generated.
+            as mandated by clause 4.5.8. System generated.
+            Only used in temporal representation of Relationships.
           type: string
           format: uri
           readOnly: true
@@ -4974,8 +5639,24 @@ components:
           description: |
             Previous Relationship's target object. Only used in notifications, if the showChanges 
             option is explicitly requested.
-          type: string
-          format: uri
+          oneOf:
+            - type: string
+              format: uri
+            - type: array
+              items:
+                type: string
+                format: uri
+          readOnly: true
+        entity:
+          description: |
+            An inline Entity obtained by Linked Entity Retrieval, corresponding to the
+            Relationship's target object. See clause 4.5.23.2. Only used in Linked Entity 
+            Retrieval, if the join=inline option is explicitly requested.
+          oneOf:
+            - $ref: '#/components/schemas/Entity'
+            - type: array
+              items:
+                $ref: '#/components/schemas/Entity'
           readOnly: true
       additionalProperties:
         oneOf:
@@ -4983,10 +5664,34 @@ components:
           - type: array
             items:
               $ref: '#/components/schemas/Property'
+          - $ref: '#/components/schemas/GeoProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/GeoProperty'
+          - $ref: '#/components/schemas/LanguageProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/LanguageProperty'
+          - $ref: '#/components/schemas/VocabProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/VocabProperty'
+          - $ref: '#/components/schemas/JsonProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/JsonProperty'
+          - $ref: '#/components/schemas/ListProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListProperty'
           - $ref: '#/components/schemas/Relationship'
           - type: array
             items:
               $ref: '#/components/schemas/Relationship'
+          - $ref: '#/components/schemas/ListRelationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListRelationship'
     Subscription:
       oneOf:
         - $ref: '#/components/schemas/Subscription.OnChange'
@@ -5017,11 +5722,18 @@ components:
           type: string
         entities:
           description: |
-            Entities subscribed.
+            Entities subscribed. 
+            Mandatory if timeInterval is present, unless the execution of the request 
+            is limited to local scope (see clause 5.5.13).
           type: array
           items:
             $ref: '#/components/schemas/EntitySelector'
           minItems: 1
+        localOnly:
+          description: |
+            If localOnly=true then the subscription only pertains to the Entities 
+            stored locally (see clause 5.5.13).
+          type: boolean
         notificationTrigger:
           description: |
             The notification triggers listed indicate what kind of changes shall trigger a notification.
@@ -5080,9 +5792,15 @@ components:
             Language filter to be applied to the query (clause 4.15).
           type: string
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'        
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true      
         status:
           description: |
             Read-only. Provided by the system when querying the details of a subscription.
@@ -5099,6 +5817,16 @@ components:
             @context used for the subscription shall be used as a default.
           type: string
           format: uri
+        datasetId:
+          description: |
+            Specifies the datasetIds of the Attribute instances to be selected for each 
+            matched Attribute as per clause 4.5.5. Valid URIs, "@none" for including the 
+            default Attribute instances.
+          type: array
+          items:
+            type: string
+            format: uri
+            default: "@none"
     Subscription.Periodic:
       allOf:
         - $ref: '#/components/schemas/Subscription.Common'
@@ -5203,9 +5931,9 @@ components:
       required:
         - updated
         - notUpdated
-    VocabularyProperty:
+    VocabProperty:
       description: |
-        5.2.35 NGSI-LD VocabularyProperty.
+        5.2.35 NGSI-LD VocabProperty.
       type: object
       properties:
         type:
@@ -5213,8 +5941,8 @@ components:
             Node type.
           type: string
           enum:
-            - VocabularyProperty
-          default: VocabularyProperty
+            - VocabProperty
+          default: VocabProperty
         vocab:
           description: |
             String Values which shall be type coerced to URIs based on the supplied @context.
@@ -5225,7 +5953,7 @@ components:
                 type: string
         previousVocab:
           description: |
-            Previous Vocabulary Property vocab. Only used in notifications, if the showChanges 
+            Previous VocabProperty's vocab. Only used in notifications, if the showChanges 
             option is explicitly requested.
           oneOf:
             - type: string
@@ -5243,13 +5971,20 @@ components:
           type: string
           format: uri
         # Clause 5.2.2 Common members. System-generated temporal attributes.
-        systemGeneratedAttrs:
-          allOf:
-            - $ref: '#/components/schemas/SystemGeneratedAttributes'
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true
         instanceId:
           description: |
-            A URI uniquely identifying a Property instance,
-            as mandated by (see clause 4.5.7). System generated.
+            A URI uniquely identifying a VocabProperty instance,
+            as mandated by clause 4.5.7. System generated.
+            Only used in temporal representation of VocabProperties.
           type: string
           format: uri
           readOnly: true
@@ -5259,11 +5994,432 @@ components:
           - type: array
             items:
               $ref: '#/components/schemas/Property'
+          - $ref: '#/components/schemas/GeoProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/GeoProperty'
+          - $ref: '#/components/schemas/LanguageProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/LanguageProperty'
+          - $ref: '#/components/schemas/VocabProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/VocabProperty'
+          - $ref: '#/components/schemas/JsonProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/JsonProperty'
+          - $ref: '#/components/schemas/ListProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListProperty'
           - $ref: '#/components/schemas/Relationship'
           - type: array
             items:
               $ref: '#/components/schemas/Relationship'
+          - $ref: '#/components/schemas/ListRelationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListRelationship'
+    ListProperty:
+      description: |
+        5.2.36 NGSI-LD ListProperty.
+      type: object
+      properties:
+        type:
+          description: |
+            Node type.
+          type: string
+          enum:
+            - ListProperty
+          default: ListProperty
+        valueList:
+          description: |
+            Ordered array of Property Values.
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/DateTimeValue'
+              - $ref: '#/components/schemas/AnyValue'
+        observedAt:
+          description: |
+            Timestamp. See clause 4.8.
+          $ref: '#/components/schemas/ObservedAt'
+        unitCode:
+          description: |
+            Property Value's unit code.
+          type: string
+        datasetId:
+          description: |
+            It allows identifying a set or group of property list values.
+          type: string
+          format: uri
+        # Clause 5.2.2 Common members. System-generated temporal attributes.
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true
+        instanceId:
+          description: |
+            A URI uniquely identifying a ListProperty instance as 
+            mandated by clause 4.5.7. System generated.
+            Only used in temporal representation of ListProperties.
+          type: string
+          format: uri
+          readOnly: true
+        previousValueList:
+          description: |
+            Ordered array of Property Values. See NGSI-LD Value
+            definition in clause 3.1
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/DateTimeValue'
+              - $ref: '#/components/schemas/AnyValue'
+          readOnly: true
+      additionalProperties:
+        oneOf:
+          - $ref: '#/components/schemas/Property'
+          - type: array
+            items:
+              $ref: '#/components/schemas/Property'
+          - $ref: '#/components/schemas/GeoProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/GeoProperty'
+          - $ref: '#/components/schemas/LanguageProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/LanguageProperty'
+          - $ref: '#/components/schemas/VocabProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/VocabProperty'
+          - $ref: '#/components/schemas/JsonProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/JsonProperty'
+          - $ref: '#/components/schemas/ListProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListProperty'
+          - $ref: '#/components/schemas/Relationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/Relationship'
+          - $ref: '#/components/schemas/ListRelationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListRelationship'
+    ListRelationship:
+      description: |
+        5.2.37 NGSI-LD ListRelationship.
+      properties:
+        type:
+          description: |
+            Node type.
+          type: string
+          enum:
+            - ListRelationship
+          default: ListRelationship
+        objectList:
+          description: |
+            Ordered array of Relationship target objects.
+            In the normalized form, each array element holds a JSON object 
+            containing a containing a single Attribute with a key called "object" 
+            and where the value is a valid URI. In the concise form, each string 
+            in the array holds a valid URI.
+          oneOf:
+            - type: array
+              items:
+                type: object
+                format: uri
+            - type: array
+              items:
+                type: string
+                format: uri
+        objectType:
+          description: |
+            Node Type of the Relationship's target object. 
+            Both short hand string(s) (type name) or URI(s) are allowed.
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+        observedAt:
+          description: |
+            Timestamp. See clause 4.8.
+          $ref: '#/components/schemas/ObservedAt'
+        datasetId:
+          description: |
+            It allows identifying a set or group of target relationship objects.
+          type: string
+          format: uri
+        # Clause 5.2.2 Common members. System-generated temporal attributes.
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true         
+        instanceId:
+          description: |
+            A URI uniquely identifying a ListRelationship instance
+            as mandated by clause 4.5.8. System generated.
+            Only used in temporal representation of ListRelationships.
+          type: string
+          format: uri
+          readOnly: true
+        previousObjectList:
+          description: |
+            Ordered array of previous Relationship target objects.
+            In the normalized form, each array element holds a JSON object 
+            containing a containing a single Attribute with a key called "object" 
+            and where the value is a valid URI. In the concise form, each string 
+            in the array holds a valid URI.
+          oneOf:
+            - type: array
+              items:
+                type: object
+                format: uri
+            - type: array
+              items:
+                type: string
+                format: uri
+          readOnly: true
+        entityList:
+          description: |
+            An array of inline Entity obtained by Linked Entity Retrieval, corresponding 
+            to the ListRelationship's target object. See clause 4.5.23.2. Only used in 
+            Linked Entity Retrieval, if the join=inline option is explicitly requested.
+          type: array
+          items:
+            $ref: '#/components/schemas/Entity'
+          readOnly: true
+      additionalProperties:
+        oneOf:
+          - $ref: '#/components/schemas/Property'
+          - type: array
+            items:
+              $ref: '#/components/schemas/Property'
+          - $ref: '#/components/schemas/GeoProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/GeoProperty'
+          - $ref: '#/components/schemas/LanguageProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/LanguageProperty'
+          - $ref: '#/components/schemas/VocabProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/VocabProperty'
+          - $ref: '#/components/schemas/JsonProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/JsonProperty'
+          - $ref: '#/components/schemas/ListProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListProperty'
+          - $ref: '#/components/schemas/Relationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/Relationship'
+          - $ref: '#/components/schemas/ListRelationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListRelationship'
+    JsonProperty:
+      description: |
+        5.2.38 NGSI-LD JsonProperty.
+      type: object
+      properties:
+        type:
+          description: |
+            Node type.
+          type: string
+          enum:
+            - JsonProperty
+          default: JsonProperty
+        json:
+          description: |
+            Raw unexpandable JSON which shall not be interpreted as JSON-LD using the supplied @context.
+          type: object
+        previousJson:
+          description: |
+            Previous JsonProperty's json. Only used in notifications, if the showChanges 
+            option is explicitly requested.
+          type: object
+          readOnly: true
+        observedAt:
+          description: |
+            Timestamp. See clause 4.8.
+          $ref: '#/components/schemas/ObservedAt'
+        datasetId:
+          description: |
+            It allows identifying a set or group of property values.
+          type: string
+          format: uri
+        # Clause 5.2.2 Common members. System-generated temporal attributes.
+        createdAt: 
+          $ref: '#/components/schemas/CreatedAt'
+          readOnly: true
+        modifiedAt:
+          $ref: '#/components/schemas/ModifiedAt'
+          readOnly: true
+        deletedAt:
+          $ref: '#/components/schemas/DeletedAt'
+          readOnly: true
+        instanceId:
+          description: |
+            A URI uniquely identifying a JsonProperty instance,
+            as mandated by clause 4.5.7. System generated.
+            Only used in temporal representation of JsonProperties.
+          type: string
+          format: uri
+          readOnly: true
+      additionalProperties:
+        oneOf:
+          - $ref: '#/components/schemas/Property'
+          - type: array
+            items:
+              $ref: '#/components/schemas/Property'
+          - $ref: '#/components/schemas/GeoProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/GeoProperty'
+          - $ref: '#/components/schemas/LanguageProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/LanguageProperty'
+          - $ref: '#/components/schemas/VocabProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/VocabProperty'
+          - $ref: '#/components/schemas/JsonProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/JsonProperty'
+          - $ref: '#/components/schemas/ListProperty'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListProperty'
+          - $ref: '#/components/schemas/Relationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/Relationship'
+          - $ref: '#/components/schemas/ListRelationship'
+          - type: array
+            items:
+              $ref: '#/components/schemas/ListRelationship'
+    EntityMap:
+      description: |
+        5.2.39 EntityMap.
+      type: object
+      properties:
+        id:
+          description: |
+            EntityMap id.
+          type: string
+          format: uri
+        type:
+          description: |
+            Node type.
+          type: string
+          enum:
+            - EntityMap
+          default: EntityMap
+        expiresAt:
+          description: |
+            Expiration date for the EntityMap.
+          type: string
+          format: date-time
+        entityMap:
+          description: |
+            System generated mapping of Entities to CSourceRegistrations.
+            
+            A set of key-value pairs whose keys shall be strings representing 
+            Entity ids and whose values shall be an array holding every 
+            CSourceRegistration id which is relevant to the ongoing Context 
+            Information Consumption request (see clause 4.21). 
+            
+            The key "@none" shall be used to refer to an Entity that is held locally.
+          type: object
+          readOnly: true
+        linkedMaps:
+          description: |
+            System generated mapping of Context CSourceRegistrations to a URI 
+            indicating which EntityMaps was used by the Context Source.
 
+            A set of key-value pairs whose keys shall be strings representing 
+            CSourceRegistration ids which are relevant to the ongoing Context 
+            Information request and whose values shall represent the associated 
+            EntityMap id used by the ContextSource.
+          type: object
+          readOnly: true
+      required:
+        - type
+        - expiresAt
+    ContextSourceIdentity:
+      description: |
+        5.2.40 This type represents the data uniquely identifying a Context Source, 
+        and if the Context Source supports multi-tenancy (see clause 4.14) uniquely 
+        identifying a Tenant within that Context Source.
+      type: object
+      properties:
+        id:
+          description: |
+            Context Source ID.
+          type: string
+          format: uri
+        type:
+          description: |
+            Node type.
+          type: string
+          enum:
+            - ContextSourceIdentity
+          default: ContextSourceIdentity
+        contextSourceExtras:
+          description: |
+            Instance specific information relevant to the configuration 
+            of the Context Source itself in raw unexpandable JSON which 
+            shall not be interpreted as JSON-LD using the supplied @context.
+          type: object
+        contextSourceUpTime:
+          description: |
+            Total Duration that the Context Source has been available.
+          type: string
+        contextSourceTimeAt:
+          description: |
+            Current time observed at the Context Source. Timestamp.
+            See clause 4.8.
+          type: string
+          format: date-time
+        contextSourceAlias:
+          description: |
+            A unique id for a Context Source which can be used to identify loops. 
+            In the multi-tenancy use case (see clause 4.14), this id shall be 
+            used to identify a specific Tenant within a registered Context Source.
+          type: string
+          minLength: 1
+      required:
+        - id
+        - type
+        - contextSourceUpTime
+        - contextSourceTimeAt
+        - contextSourceAlias
+        
   responses:
     BadRequest:
       description: |
@@ -5273,6 +6429,8 @@ components:
       headers:
         NGSILD-Tenant:
           $ref: '#/components/headers/NGSILD-Tenant'
+        NGSILD-Warning:
+          $ref: '#/components/headers/NGSILD-Warning'
       content:
         application/json:
           schema:
@@ -5290,12 +6448,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-        application/json+ld:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-        application/geo:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
     MultiStatus.BatchOperationResult:
       description: |
         If the entity input data matches to a registration, the relevant parts of the request are forwarded
@@ -5306,6 +6458,8 @@ components:
       headers:
         NGSILD-Tenant:
           $ref: '#/components/headers/NGSILD-Tenant'
+        Location:
+          $ref: '#/components/headers/Location'
       content:
         application/json:
           schema:
@@ -5338,17 +6492,13 @@ components:
       headers:
         NGSILD-Tenant:
           $ref: '#/components/headers/NGSILD-Tenant'
+        NGSILD-Warning:
+          $ref: '#/components/headers/NGSILD-Warning'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-        application/json+ld:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-        application/geo:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    ServiceUnavailable:
+    GatewayTimeout:
       description: |
         It is used when re-downloading fails.
       headers:
@@ -5356,12 +6506,6 @@ components:
           $ref: '#/components/headers/NGSILD-Tenant'
       content:
         application/json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-        application/json+ld:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-        application/geo:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
     Unprocessable:
@@ -5372,14 +6516,10 @@ components:
       headers:
         NGSILD-Tenant:
           $ref: '#/components/headers/NGSILD-Tenant'
+        NGSILD-Warning:
+          $ref: '#/components/headers/NGSILD-Warning'
       content:
         application/json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-        application/json+ld:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-        application/geo:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
     NotImplemented:
@@ -5389,13 +6529,9 @@ components:
       headers:
         NGSILD-Tenant:
           $ref: '#/components/headers/NGSILD-Tenant'
+        NGSILD-Warning:
+            $ref: '#/components/headers/NGSILD-Warning'
       content:
         application/json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-        application/json+ld:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-        application/geo:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
