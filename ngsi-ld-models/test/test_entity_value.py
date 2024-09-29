@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-    Example schemas for IoT device with temperature and humidity sensors
+    Example schemas for IoT device with temperature and humidity sensors and for vehicles.
 
     Example schemas compliant with the NGSI-LD OAS metamodel according to ETSI GS CIM 009. 
 
@@ -45,10 +45,27 @@ class TestEntityValue(unittest.TestCase):
                 deleted_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 instance_id = '',
                 previous_value = None,
+                language_map = None,
+                previous_language_map = None,
+                vocab = None,
+                previous_vocab = None,
+                value_list = [
+                    null
+                    ],
+                previous_value_list = [
+                    null
+                    ],
                 object = None,
                 object_type = None,
                 previous_object = None,
-                entity = None
+                entity = None,
+                object_list = None,
+                previous_object_list = None,
+                entity_list = [
+                    {
+                        'key' : null
+                        }
+                    ]
             )
         else:
             return EntityValue(

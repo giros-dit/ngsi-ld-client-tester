@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-    Example schemas for IoT device with temperature and humidity sensors
+    Example schemas for IoT device with temperature and humidity sensors and for vehicles.
 
     Example schemas compliant with the NGSI-LD OAS metamodel according to ETSI GS CIM 009. 
 
@@ -18,8 +18,12 @@ import pprint
 from pydantic import BaseModel, ConfigDict, Field, StrictStr, ValidationError, field_validator
 from typing import Any, List, Optional
 from ngsi_ld_models.models.geo_property import GeoProperty
+from ngsi_ld_models.models.language_property import LanguageProperty
+from ngsi_ld_models.models.list_property import ListProperty
+from ngsi_ld_models.models.list_relationship import ListRelationship
 from ngsi_ld_models.models.model_property import ModelProperty
 from ngsi_ld_models.models.relationship import Relationship
+from ngsi_ld_models.models.vocab_property import VocabProperty
 from pydantic import StrictStr, Field
 from typing import Union, List, Set, Optional, Dict
 from typing_extensions import Literal, Self

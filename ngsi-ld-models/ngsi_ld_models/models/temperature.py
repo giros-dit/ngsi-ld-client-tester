@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-    Example schemas for IoT device with temperature and humidity sensors
+    Example schemas for IoT device with temperature and humidity sensors and for vehicles.
 
     Example schemas compliant with the NGSI-LD OAS metamodel according to ETSI GS CIM 009. 
 
