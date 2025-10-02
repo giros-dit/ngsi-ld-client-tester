@@ -53,6 +53,11 @@ LIST_ENTITIES = [
     "HumiditySensor"
 ]
 
+LIST_PROPERTIES = [
+    "temperature",
+    "humidity"
+]
+
 # Init FastAPI server
 app = FastAPI(
     title="Notifier Tester API",
@@ -67,7 +72,7 @@ async def startup_event():
     # Check Scorpio build info
     ngsi_ld_health_info_api.check_scorpio_info()
 
-    for entity in LIST_ENTITIES:
+    for entity, property in zip(LIST_ENTITIES, LIST_PROPERTIES):
         endpoint = Endpoint(
             uri = NOTIFIER_URI,
             accept="application/json"
@@ -77,7 +82,7 @@ async def startup_event():
         notification_params = NotificationParams (
             endpoint=endpoint,
             format="normalized",
-            attributes=["temperature"],
+            attributes=[property],
             sysAttrs=True
         )
 
